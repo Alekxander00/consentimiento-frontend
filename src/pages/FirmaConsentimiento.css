@@ -1,0 +1,321 @@
+/* FirmaConsentimiento.css */
+.firma-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.firma-modal {
+  background-color: var(--color-tarjeta);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-bordes);
+  background-color: var(--color-primario);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  padding: 1.5rem;
+}
+
+.seccion-datos, .seccion-firma, .seccion-declaraciones {
+  margin-bottom: 2rem;
+}
+
+.seccion-datos h3, .seccion-firma h3, .seccion-declaraciones h3 {
+  margin-bottom: 1rem;
+  color: var(--color-primario);
+  border-bottom: 2px solid var(--color-bordes);
+  padding-bottom: 0.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--color-texto);
+}
+
+.form-group input, .form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid var(--color-bordes);
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+.form-group input:focus, .form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.firma-container {
+  border: 2px dashed var(--color-bordes);
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: var(--color-fondo);
+}
+
+.firma-canvas {
+  border: 1px solid var(--color-bordes);
+  border-radius: 4px;
+  background-color: white;
+  cursor: crosshair;
+  margin-bottom: 1rem;
+}
+
+.firma-acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-limpiar {
+  background-color: var(--color-secundario);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-limpiar:hover {
+  background-color: #475569;
+}
+
+.firma-instructions {
+  color: var(--color-secundario);
+  font-style: italic;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-bordes);
+  background-color: var(--color-hover);
+  border-radius: 0 0 12px 12px;
+}
+
+.btn-cancelar {
+  background-color: var(--color-secundario);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-cancelar:hover {
+  background-color: #475569;
+}
+
+.btn-guardar {
+  background-color: var(--color-primario);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-guardar:hover:not(:disabled) {
+  background-color: var(--color-primario-hover);
+}
+
+.btn-guardar:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .firma-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .modal-header {
+    padding: 1rem;
+  }
+  
+  .modal-content {
+    padding: 1rem;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .firma-canvas {
+    width: 100%;
+    height: 150px;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+  }
+  
+  .btn-cancelar, .btn-guardar {
+    width: 100%;
+  }
+}
+
+.seccion-profesional {
+  margin-bottom: 1.5rem;
+}
+
+.busqueda-profesional {
+  position: relative;
+}
+
+.busqueda-profesional input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-bordes);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.lista-profesionales {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-tarjeta);
+  border: 1px solid var(--color-bordes);
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 8px var(--color-sombra);
+}
+
+.opcion-profesional {
+  padding: 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-bordes);
+  display: flex;
+  flex-direction: column;
+}
+
+.opcion-profesional:hover {
+  background-color: var(--color-hover);
+}
+
+.opcion-profesional strong {
+  margin-bottom: 0.25rem;
+}
+
+.opcion-profesional span {
+  color: var(--color-secundario);
+  margin-bottom: 0.25rem;
+}
+
+.opcion-profesional small {
+  color: var(--color-secundario);
+  font-size: 0.8rem;
+}
+
+.info-profesional {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--color-fondo);
+  border-radius: 4px;
+  border: 1px solid var(--color-bordes);
+}
+
+.info-profesional h4 {
+  margin-bottom: 0.5rem;
+  color: var(--color-primario);
+}
+
+.info-profesional p {
+  margin: 0.25rem 0;
+}
+
+.btn-cambiar-profesional {
+  background-color: var(--color-secundario);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.btn-cambiar-profesional:hover {
+  background-color: #475569;
+}
+
+/* Ajustes para tema oscuro */
+.tema-oscuro .lista-profesionales {
+  background-color: var(--color-tarjeta);
+  border-color: var(--color-bordes);
+}
+
+.tema-oscuro .opcion-profesional {
+  border-bottom-color: var(--color-bordes);
+}
+
+.tema-oscuro .info-profesional {
+  background-color: var(--color-hover);
+  border-color: var(--color-bordes);
+}
