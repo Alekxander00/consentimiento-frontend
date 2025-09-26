@@ -40,3 +40,43 @@
 .read-the-docs {
   color: #888;
 }
+
+.connection-status {
+  margin-left: auto;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.connection-status.connected {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.connection-status.disconnected {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.loading-bar {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ffeaa7;
+}
+
+.error-banner {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 5px;
+  border-left: 4px solid #dc3545;
+}
+
+.error-banner h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}

@@ -18,30 +18,36 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
   const [busquedaProfesional, setBusquedaProfesional] = useState('');
   const [mostrarListaProfesionales, setMostrarListaProfesionales] = useState(false);
   const [firmaData, setFirmaData] = useState(null);
+  const [loading, setLoading] = useState(false);
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [posicion, setPosicion] = useState({ x: 0, y: 0 });
   const busquedaRef = useRef(null);
 
+  // URL base desde variable de entorno
+  const API_URL = 'https://backend-consentimientos-production.up.railway.app';
+
   // Cargar profesionales al abrir el modal
   useEffect(() => {
     const cargarProfesionales = async () => {
-  try {
-    const response = await fetch('http://localhost:4000/profesionales');
-    
-    if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
-    }
-    
-    const data = await response.json();
-    setProfesionales(data);
-  } catch (error) {
-    console.error('Error al cargar profesionales:', error);
-    // Puedes mostrar un mensaje al usuario si lo deseas
-  }
-};
-
-    
+      try {
+        setLoading(true);
+        const API_URL = import.meta.env.VITE_API_URL || '/api';
+      const response = await fetch(`${API_URL}/profesionales`);
+        
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        setProfesionales(data);
+      } catch (error) {
+        console.error('Error al cargar profesionales:', error);
+        alert('Error al cargar la lista de profesionales');
+      } finally {
+        setLoading(false);
+      }
+    };
 
     cargarProfesionales();
 
@@ -56,19 +62,21 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [API_URL]);
 
   // Filtrar profesionales según la búsqueda
   const profesionalesFiltrados = busquedaProfesional
     ? profesionales.filter(p =>
-        p.nombre.toLowerCase().includes(busquedaProfesional.toLowerCase()) ||
-        p.especialidad.toLowerCase().includes(busquedaProfesional.toLowerCase())
+        p.nombre?.toLowerCase().includes(busquedaProfesional.toLowerCase()) ||
+        p.especialidad?.toLowerCase().includes(busquedaProfesional.toLowerCase())
       )
     : profesionales;
 
   // Iniciar dibujo de firma
   const startDrawing = (e) => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
+    
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -82,12 +90,17 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
     if (!isDrawing) return;
     
     const canvas = canvasRef.current;
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
     ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000';
     ctx.moveTo(posicion.x, posicion.y);
     ctx.lineTo(x, y);
     ctx.stroke();
@@ -99,15 +112,34 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
   const stopDrawing = () => {
     setIsDrawing(false);
     const canvas = canvasRef.current;
-    setFirmaData(canvas.toDataURL());
+    if (canvas) {
+      setFirmaData(canvas.toDataURL());
+    }
   };
 
   // Limpiar firma
   const clearSignature = () => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    setFirmaData(null);
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      setFirmaData(null);
+    }
+  };
+
+  // Función mejorada para convertir dataURL a Blob
+  const dataURLtoBlob = (dataURL) => {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new Blob([u8arr], { type: mime });
   };
 
   // Guardar consentimiento firmado
@@ -128,24 +160,25 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
     }
 
     try {
-      // Convertir la firma de dataURL a Blob
-      const response = await fetch(firmaData);
-      const firmaBlob = await response.blob();
+      setLoading(true);
+      
+      // Convertir la firma de dataURL a Blob usando nuestra función
+      const firmaBlob = dataURLtoBlob(firmaData);
 
       // Crear FormData
       const formData = new FormData();
       formData.append('idconsto', consentimiento.idconsto);
       formData.append('paciente_nombre', datosPaciente.nombre);
       formData.append('paciente_identificacion', datosPaciente.identificacion);
-      formData.append('paciente_telefono', datosPaciente.telefono);
-      formData.append('paciente_direccion', datosPaciente.direccion);
+      formData.append('paciente_telefono', datosPaciente.telefono || '');
+      formData.append('paciente_direccion', datosPaciente.direccion || '');
       formData.append('paciente_firma', firmaBlob, 'firma.png');
       formData.append('aceptacion', datosPaciente.aceptacion);
       formData.append('declaracion', datosPaciente.declaracion);
-      formData.append('observaciones', datosPaciente.observaciones);
+      formData.append('observaciones', datosPaciente.observaciones || '');
       formData.append('profesional_id', profesionalSeleccionado.id);
 
-      const responseBackend = await fetch('http://localhost:4000/consentimientos-firmados', {
+      const responseBackend = await fetch(`${API_URL}/consentimientos-firmados`, {
         method: 'POST',
         body: formData,
       });
@@ -154,18 +187,24 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
         const resultado = await responseBackend.json();
         
         // Descargar el PDF desde el backend
-        window.open(`http://localhost:4000/generar-pdf/${resultado.id}`, '_blank');
+        const pdfWindow = window.open(`${API_URL}/generar-pdf/${resultado.id}`, '_blank');
         
-        alert('Consentimiento firmado y guardado correctamente. El PDF se está descargando.');
-        if (onSave) onSave();
-        if (onClose) onClose();
+        // Esperar a que se abra la ventana del PDF
+        setTimeout(() => {
+          alert('Consentimiento firmado y guardado correctamente. El PDF se está descargando.');
+          if (onSave) onSave();
+          if (onClose) onClose();
+        }, 1000);
+        
       } else {
         const errorData = await responseBackend.json();
         alert(`Error al guardar: ${errorData.error || 'Error desconocido'}`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error de conexión con el servidor');
+      alert('Error de conexión con el servidor: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -174,7 +213,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
       <div className="firma-modal">
         <div className="modal-header">
           <h2>Firmar Consentimiento: {consentimiento.nombre}</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <button className="close-btn" onClick={onClose} disabled={loading}>×</button>
         </div>
 
         <div className="modal-content">
@@ -191,6 +230,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                   setMostrarListaProfesionales(true);
                 }}
                 onFocus={() => setMostrarListaProfesionales(true)}
+                disabled={loading}
               />
               {mostrarListaProfesionales && profesionalesFiltrados.length > 0 && (
                 <div className="lista-profesionales">
@@ -231,6 +271,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                     setProfesionalSeleccionado(null);
                     setBusquedaProfesional('');
                   }}
+                  disabled={loading}
                 >
                   Cambiar profesional
                 </button>
@@ -249,6 +290,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                   value={datosPaciente.nombre}
                   onChange={(e) => setDatosPaciente({...datosPaciente, nombre: e.target.value})}
                   required
+                  disabled={loading}
                 />
               </div>
               
@@ -259,6 +301,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                   value={datosPaciente.identificacion}
                   onChange={(e) => setDatosPaciente({...datosPaciente, identificacion: e.target.value})}
                   required
+                  disabled={loading}
                 />
               </div>
               
@@ -268,6 +311,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                   type="tel"
                   value={datosPaciente.telefono}
                   onChange={(e) => setDatosPaciente({...datosPaciente, telefono: e.target.value})}
+                  disabled={loading}
                 />
               </div>
               
@@ -277,6 +321,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                   type="text"
                   value={datosPaciente.direccion}
                   onChange={(e) => setDatosPaciente({...datosPaciente, direccion: e.target.value})}
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -295,9 +340,11 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                 onMouseUp={stopDrawing}
                 onMouseLeave={stopDrawing}
                 className="firma-canvas"
+                style={{ cursor: loading ? 'not-allowed' : 'crosshair' }}
+                disabled={loading}
               />
               <div className="firma-acciones">
-                <button onClick={clearSignature} className="btn-limpiar">
+                <button onClick={clearSignature} className="btn-limpiar" disabled={loading}>
                   Limpiar Firma
                 </button>
                 <span className="firma-instructions">
@@ -316,6 +363,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                 type="text"
                 value={datosPaciente.aceptacion}
                 onChange={(e) => setDatosPaciente({...datosPaciente, aceptacion: e.target.value})}
+                disabled={loading}
               />
             </div>
             
@@ -325,6 +373,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                 type="text"
                 value={datosPaciente.declaracion}
                 onChange={(e) => setDatosPaciente({...datosPaciente, declaracion: e.target.value})}
+                disabled={loading}
               />
             </div>
             
@@ -334,21 +383,22 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                 value={datosPaciente.observaciones}
                 onChange={(e) => setDatosPaciente({...datosPaciente, observaciones: e.target.value})}
                 rows="3"
+                disabled={loading}
               />
             </div>
           </div>
         </div>
 
         <div className="modal-footer">
-          <button onClick={onClose} className="btn-cancelar">
+          <button onClick={onClose} className="btn-cancelar" disabled={loading}>
             Cancelar
           </button>
           <button 
             onClick={guardarConsentimientoFirmado} 
             className="btn-guardar"
-            disabled={!firmaData || !datosPaciente.nombre || !datosPaciente.identificacion || !profesionalSeleccionado}
+            disabled={!firmaData || !datosPaciente.nombre || !datosPaciente.identificacion || !profesionalSeleccionado || loading}
           >
-            Guardar y Generar PDF
+            {loading ? 'Guardando...' : 'Guardar y Generar PDF'}
           </button>
         </div>
       </div>

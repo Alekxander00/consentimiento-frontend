@@ -40,7 +40,8 @@ const Consentimientos = () => {
   const fetchConsentimientos = async () => {
     try {
       setError('');
-      const response = await fetch('http://localhost:4000/consentimientos');
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      const response = await fetch(`${API_URL}/consentimientos`);
       
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
