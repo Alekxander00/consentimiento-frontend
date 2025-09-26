@@ -52,7 +52,7 @@ const ListaPacientes = () => {
 
   const handleDobleClickPaciente = (paciente) => {
     // Abrir ventana de firma con los datos del paciente
-    const url = `/firma-acces?id_paciente=${paciente.id_access}&id_consentimiento=${paciente.consentimiento_id || ''}`;
+    const url = `/firma-access?id_paciente=${paciente.id_access} || ''}`; //&id_consentimiento=${paciente.consentimiento_id
     window.open(url, '_blank', 'width=1200,height=800,scrollbars=yes');
   };
 
