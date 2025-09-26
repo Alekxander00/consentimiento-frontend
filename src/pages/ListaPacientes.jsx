@@ -26,24 +26,26 @@ const ListaPacientes = () => {
 
   const cargarPacientes = async () => {
     try {
-      setLoading(true);
-      const API_URL = import.meta.env.VITE_API_URL || '/api';
-      const response = await fetch(`${API_URL}/pacientes-access`);
-      
-      if (!response.ok) {
-        throw new Error('Error al cargar los pacientes');
-      }
-      
-      const data = await response.json();
-      setPacientes(data);
-    } catch (err) {
-      setError('No se pudieron cargar los pacientes: ' + err.message);
-      console.error('Error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+            setLoading(true);
+            const API_URL = import.meta.env.VITE_API_URL || '/api';
+            // Cambia esta línea:
+            const response = await fetch(`${API_URL}/pacientes-access`);
+            // O si usas la ruta directa:
+            // const response = await fetch(`/api/pacientes-access`);
+            
+            if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            setPacientes(data);
+        } catch (err) {
+            setError('No se pudieron cargar los pacientes: ' + err.message);
+            console.error('Error:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
   const toggleTema = () => {
     setTemaOscuro(!temaOscuro);
   };
