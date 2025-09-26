@@ -103,7 +103,7 @@ const ListaPacientes = () => {
               onChange={(e) => setBusqueda(e.target.value)}
               className="search-input"
             />
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"></span>
           </div>
           <button 
             className="btn btn-outline theme-toggle"
