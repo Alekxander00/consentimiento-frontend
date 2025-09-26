@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Consentimientos from "./pages/Consentimientos";
 import FirmaConsentimiento from "./pages/FirmaConsentimiento";
 import FirmaDesdeAccess from "./pages/FirmaDesdeAccess"; // ✅ Importación correcta
+import ListaPacientes from './pages/ListaPacientes';
 import { checkBackendConnection } from "./utils/apiCheck";
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
         <Route path="/consentimientos" element={<Consentimientos />} />
         <Route path="/firmaConsentimiento" element={<FirmaConsentimiento />} />
         <Route path="/firma-access" element={<FirmaDesdeAccess />} /> {/* ✅ Ruta agregada */}
+        <Route path="/lista-pacientes" element={<ListaPacientes />} />
       </Routes>
     </Router>
   );
