@@ -1,321 +1,577 @@
-/* FirmaConsentimiento.css */
-.firma-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px;
+/* Variables CSS para modo claro/oscuro */
+:root {
+  /* Colores modo claro */
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary-color: #64748b;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --background-color: #ffffff;
+  --surface-color: #f8fafc;
+  --surface-elevated: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
 }
 
-.firma-modal {
-  background-color: var(--color-tarjeta);
-  border-radius: 12px;
-  width: 100%;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+[data-theme="dark"] {
+  /* Colores modo oscuro */
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --secondary-color: #94a3b8;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --background-color: #0f172a;
+  --surface-color: #1e293b;
+  --surface-elevated: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --border-hover: #475569;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
 }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--color-bordes);
-  background-color: var(--color-primario);
-  color: white;
-  border-radius: 12px 12px 0 0;
-}
-
-.modal-header h2 {
+/* Reset y base */
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-size: 1.5rem;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  color: white;
-  cursor: pointer;
   padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.modal-content {
-  padding: 1.5rem;
+/* 1. Forzar full-screen y quitar márgenes externos potenciales */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* si quieres evitar doble scroll; si no, pon auto */
 }
 
-.seccion-datos, .seccion-firma, .seccion-declaraciones {
-  margin-bottom: 2rem;
-}
-
-.seccion-datos h3, .seccion-firma h3, .seccion-declaraciones h3 {
-  margin-bottom: 1rem;
-  color: var(--color-primario);
-  border-bottom: 2px solid var(--color-bordes);
-  padding-bottom: 0.5rem;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-.form-group {
+/* 2. Hacer que el contenedor principal sea full-bleed */
+.firma-container {
+  width: 100vw !important;
+  min-width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  padding: 0.75rem 1rem !important; /* conserva algo de padding; ajusta si quieres */
+  margin: 0 auto !important;
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  align-items: stretch;
+  background: var(--background-color);
+  overflow: hidden;
 }
 
-.form-group label {
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: var(--color-texto);
-}
 
-.form-group input, .form-group textarea {
-  padding: 0.75rem;
-  border: 1px solid var(--color-bordes);
-  border-radius: 6px;
-  font-size: 1rem;
-  background-color: var(--color-fondo);
-  color: var(--color-texto);
-}
-
-.form-group input:focus, .form-group textarea:focus {
-  outline: none;
-  border-color: var(--color-primario);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.firma-container {
-  border: 2px dashed var(--color-bordes);
-  border-radius: 8px;
-  padding: 1rem;
-  background-color: var(--color-fondo);
-}
-
-.firma-canvas {
-  border: 1px solid var(--color-bordes);
-  border-radius: 4px;
-  background-color: white;
-  cursor: crosshair;
-  margin-bottom: 1rem;
-}
-
-.firma-acciones {
+/* Header mejorado */
+.firma-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem 1.5rem;
+  background: var(--surface-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
-.btn-limpiar {
-  background-color: var(--color-secundario);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
+.firma-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
 }
 
-.btn-limpiar:hover {
-  background-color: #475569;
-}
-
-.firma-instructions {
-  color: var(--color-secundario);
-  font-style: italic;
-}
-
-.modal-footer {
+.header-actions {
   display: flex;
-  justify-content: flex-end;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Contenedor principal de contenido con scroll */
+.firma-content {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0; /* importante para permitir que el overflow funcione en hijos */
+  overflow: hidden;
+  align-items: stretch;
+}
+
+/* Ajuste de las columnas: left más flexible, right ancho relativo (no fijo) */
+.content-left {
+  flex: 1 1 65%; /* ocupa ~65% del ancho */
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
+  overflow: hidden;
+  min-width: 0; /* evita overflow horizontal por hijos */
+}
+
+.content-right {
+  flex: 0 0 35%; /* ocupa ~35% del ancho; ajusta según prefieras */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 320px; /* evita que se colapse en pantallas grandes */
+  max-width: 48ch;
+  overflow: hidden;
+}
+
+@media (min-width: 1600px) {
+  .content-left { flex: 1 1 70%; }
+  .content-right { flex: 0 0 30%; }
+}
+
+/* Información del paciente mejorada */
+.paciente-info {
+  background: var(--surface-elevated);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  border-top: 1px solid var(--color-bordes);
-  background-color: var(--color-hover);
-  border-radius: 0 0 12px 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
-.btn-cancelar {
-  background-color: var(--color-secundario);
-  color: white;
-  border: none;
+.paciente-info h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.paciente-info h3::before {
+  content: "";
+  width: 4px;
+  height: 1.5rem;
+  background: var(--primary-color);
+  border-radius: var(--radius-sm);
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 140px;
+}
+
+.info-value {
+  color: var(--text-primary);
+  text-align: right;
+  flex: 1;
+  margin-left: 1rem;
+}
+
+/* Consentimiento con scroll mejorado */
+.consentimiento-info {
+  background: var(--surface-elevated);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.consentimiento-info h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.consentimiento-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.content-section {
+  background: var(--surface-color);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--primary-color);
+}
+
+.content-section h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.content-section p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* Scrollbar personalizado */
+.consentimiento-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.consentimiento-content::-webkit-scrollbar-track {
+  background: var(--surface-color);
+  border-radius: var(--radius-sm);
+}
+
+.consentimiento-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-sm);
+}
+
+.consentimiento-content::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Sección de firma mejorada */
+.firma-section {
+  background: var(--surface-elevated);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+}
+
+.firma-section h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.canvas-container {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.canvas-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.canvas-wrapper::before {
+  content: "Firme en el área punteada";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-muted);
+  font-size: 1rem;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.canvas-wrapper.has-signature::before {
+  display: none;
+}
+
+canvas {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--surface-color);
+  cursor: crosshair;
+  transition: border-color 0.2s ease;
+  max-width: 100%;
+  height: auto;
+}
+
+canvas:hover {
+  border-color: var(--border-hover);
+}
+
+.canvas-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.firma-preview {
+  text-align: center;
+  padding: 1rem;
+  background: var(--surface-color);
+  border-radius: var(--radius-md);
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.firma-preview img {
+  max-width: 100%;
+  max-height: 80px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: white;
+}
+
+/* Botones mejorados */
+.btn {
   padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-md);
   font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  min-height: 44px;
 }
 
-.btn-cancelar:hover {
-  background-color: #475569;
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-guardar {
-  background-color: var(--color-primario);
+  background: var(--success-color);
   color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
 }
 
 .btn-guardar:hover:not(:disabled) {
-  background-color: var(--color-primario-hover);
+  background: #0da271;
 }
 
-.btn-guardar:disabled {
-  background-color: #94a3b8;
-  cursor: not-allowed;
+.btn-cancelar {
+  background: var(--error-color);
+  color: white;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .firma-modal {
-    width: 95%;
-    max-height: 95vh;
-  }
-  
-  .modal-header {
-    padding: 1rem;
-  }
-  
-  .modal-content {
-    padding: 1rem;
-  }
-  
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .firma-canvas {
-    width: 100%;
-    height: 150px;
-  }
-  
-  .modal-footer {
-    flex-direction: column;
-  }
-  
-  .btn-cancelar, .btn-guardar {
-    width: 100%;
-  }
+.btn-cancelar:hover:not(:disabled) {
+  background: #dc2626;
 }
 
-.seccion-profesional {
-  margin-bottom: 1.5rem;
+.btn-limpiar {
+  background: var(--warning-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
 }
 
-.busqueda-profesional {
-  position: relative;
+.btn-limpiar:hover:not(:disabled) {
+  background: #e58e0c;
 }
 
-.busqueda-profesional input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--color-bordes);
-  border-radius: 4px;
-  font-size: 1rem;
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
-.lista-profesionales {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--color-tarjeta);
-  border: 1px solid var(--color-bordes);
-  border-top: none;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 1000;
-  box-shadow: 0 4px 8px var(--color-sombra);
+.btn-outline:hover:not(:disabled) {
+  background: var(--surface-color);
+  border-color: var(--border-hover);
 }
 
-.opcion-profesional {
-  padding: 0.75rem;
-  cursor: pointer;
-  border-bottom: 1px solid var(--color-bordes);
+.theme-toggle {
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Actions siempre visibles */
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  padding: 1.5rem 0;
+  margin-top: 1rem;
+  flex-shrink: 0;
+  background: var(--background-color);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Estados de carga y error */
+.loading-container, .error-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  padding: 2rem;
 }
 
-.opcion-profesional:hover {
-  background-color: var(--color-hover);
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border-color);
+  border-left: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
 }
 
-.opcion-profesional strong {
-  margin-bottom: 0.25rem;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-.opcion-profesional span {
-  color: var(--color-secundario);
-  margin-bottom: 0.25rem;
+.error-container h3 {
+  color: var(--error-color);
+  margin-bottom: 1rem;
 }
 
-.opcion-profesional small {
-  color: var(--color-secundario);
-  font-size: 0.8rem;
+/* Responsive mejorado */
+@media (max-width: 1024px) {
+  .firma-content {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  
+  .content-right {
+    flex: 0 0 auto;
+    min-height: 400px;
+  }
+  
+  .consentimiento-content {
+    max-height: 300px;
+  }
 }
 
-.info-profesional {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: var(--color-fondo);
-  border-radius: 4px;
-  border: 1px solid var(--color-bordes);
+@media (max-width: 768px) {
+  .firma-container {
+    padding: 0.5rem;
+    height: 100vh;
+  }
+  
+  .firma-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .firma-header h1 {
+    max-width: 100%;
+    font-size: 1.1rem;
+  }
+  
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .info-item {
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: left;
+  }
+  
+  .info-value {
+    text-align: left;
+    margin-left: 0;
+  }
+  
+  .info-label {
+    min-width: auto;
+    font-weight: 700;
+  }
+  
+  .actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .content-right {
+    flex: 0 0 auto;
+  }
 }
 
-.info-profesional h4 {
-  margin-bottom: 0.5rem;
-  color: var(--color-primario);
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-.info-profesional p {
-  margin: 0.25rem 0;
-}
-
-.btn-cambiar-profesional {
-  background-color: var(--color-secundario);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
-}
-
-.btn-cambiar-profesional:hover {
-  background-color: #475569;
-}
-
-/* Ajustes para tema oscuro */
-.tema-oscuro .lista-profesionales {
-  background-color: var(--color-tarjeta);
-  border-color: var(--color-bordes);
-}
-
-.tema-oscuro .opcion-profesional {
-  border-bottom-color: var(--color-bordes);
-}
-
-.tema-oscuro .info-profesional {
-  background-color: var(--color-hover);
-  border-color: var(--color-bordes);
+/* Focus visible para accesibilidad */
+.btn:focus-visible,
+canvas:focus-visible,
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
