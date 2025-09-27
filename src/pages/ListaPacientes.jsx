@@ -49,22 +49,10 @@ const ListaPacientes = () => {
   };
 
   const handleDobleClickPaciente = (paciente) => {
-    console.log('🖱️ Paciente seleccionado:', paciente);
-    
-    // SOLUCIÓN SEGURA: Guardar en localStorage
-    try {
-      localStorage.setItem('pacienteSeleccionado', JSON.stringify(paciente));
-      console.log('💾 Paciente guardado en localStorage');
-      
-      // Navegar a la ruta de firma
-      navigate('/firma-acces');
-      
-    } catch (error) {
-      console.error('❌ Error al navegar:', error);
-      alert('Error al abrir la ventana de firma');
-    }
+    // Abrir ventana de firma con los datos del paciente
+    const url = `/firma-acces?id_paciente=${paciente.id_access}`; //&id_consentimiento=${paciente.consentimiento_id || ''}
+    window.location.href = url;
   };
-
 
   const handleEditarPaciente = (paciente, e) => {
     e.stopPropagation();

@@ -24,6 +24,8 @@ const FirmaDesdeAccess = () => {
     }
   }, [temaOscuro]);
 
+  
+
   // Efecto para cargar datos del paciente
   useEffect(() => {
     if (pacienteId) {
