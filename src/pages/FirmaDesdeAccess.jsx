@@ -73,6 +73,7 @@ const FirmaDesdeAccess = () => {
       formData.append('profesional_id', pacienteData.id_profesional || '');
       formData.append('aceptacion', 'Acepto el procedimiento');
       formData.append('declaracion', 'Declaro que he entendido la información');
+      formData.append('id_access', pacienteId);
       
       // Convertir base64 a blob para la firma
       const byteCharacters = atob(firmaData.split(',')[1]);

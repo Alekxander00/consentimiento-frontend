@@ -393,3 +393,50 @@
     flex-direction: column;
   }
 }
+
+/* Agrega estos estilos al archivo existente */
+
+.badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-success {
+  background: var(--success-color);
+  color: white;
+}
+
+.badge-warning {
+  background: var(--warning-color);
+  color: white;
+}
+
+.consentimiento-nombre {
+  font-weight: 500;
+  color: var(--text-primary);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.especialidad {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.estado {
+  text-align: center;
+}
+
+/* Mejorar la tabla para las nuevas columnas */
+.pacientes-table th:nth-child(1) { width: 20%; } /* Nombre */
+.pacientes-table th:nth-child(2) { width: 15%; } /* Identificación */
+.pacientes-table th:nth-child(3) { width: 25%; } /* Consentimiento */
+.pacientes-table th:nth-child(4) { width: 15%; } /* Especialidad */
+.pacientes-table th:nth-child(5) { width: 10%; } /* Estado */
+.pacientes-table th:nth-child(6) { width: 15%; } /* Acciones */
