@@ -90,7 +90,8 @@ const ListaPacientes = () => {
   return (
     <div className="lista-pacientes-container">
       <header className="lista-pacientes-header">
-        <h1>Lista de Pacientes Pendientes por Firma</h1>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhBCSDxk3yzp9ndJpq1YTQKpn3mZiS1MtwdSyB1mi1IyRARG8SC4aSfYRH3AG-NIq7C9o" alt="Logo" className="logo" />
+        <h1>Consentimientos por firmar</h1>
         <div className="header-actions">
           <div className="search-container">
             <input
@@ -100,7 +101,7 @@ const ListaPacientes = () => {
               onChange={(e) => setBusqueda(e.target.value)}
               className="search-input"
             />
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"></span>
           </div>
           <button 
             className="btn btn-outline theme-toggle"
@@ -181,13 +182,7 @@ const ListaPacientes = () => {
                     >
                       📝 {paciente.firmado ? 'Firmado' : 'Firmar'}
                     </button>
-                    <button 
-                      onClick={(e) => handleEditarPaciente(paciente, e)}
-                      className="btn btn-outline btn-sm"
-                      title="Ver detalles"
-                    >
-                      👁️ Ver
-                    </button>
+                    
                   </td>
                 </tr>
               ))
