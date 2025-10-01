@@ -264,9 +264,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
           <button className="btn-volver" onClick={handleClose} disabled={loading}>
             Volver a lista de pacientes
           </button>
-          <button className="btn-cerrar" onClick={handleClose} disabled={loading}>
-            Cerrar
-          </button>
+          <button onClick={() => navigate('/lista-pacientes')}>Volver a la lista</button>
         </div>
       </div>
 

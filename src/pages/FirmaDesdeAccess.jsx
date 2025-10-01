@@ -160,9 +160,7 @@ const FirmaDesdeAccess = () => {
           >
             {temaOscuro ? '☀️' : '🌙'}
           </button>
-          <button onClick={() => window.close()} className="btn btn-outline">
-            Cerrar
-          </button>
+          <button className="btn btn-outline" onClick={() => navigate('/lista-pacientes')}>Volver a la lista</button>
         </div>
       </header>
 
@@ -242,9 +240,7 @@ const FirmaDesdeAccess = () => {
         <button onClick={guardarConsentimiento} className="btn btn-guardar">
           ✅ Guardar Consentimiento Firmado
         </button>
-        <button onClick={() => window.close()} className="btn btn-cancelar">
-          ❌ Cancelar
-        </button>
+        <button className="btn btn-cancelar" onClick={() => navigate('/lista-pacientes')}>❌ Cancelar</button>
       </div>
     </div>
   );
