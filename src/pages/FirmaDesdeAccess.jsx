@@ -263,29 +263,38 @@ const CanvasFirma = ({ onFirmaComplete }) => {
     ctx.strokeStyle = '#000';
   }, []);
 
-  const startDrawing = (e) => {
-    setIsDrawing(true);
+  const getCoords = (e) => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    ctx.beginPath();
-    ctx.moveTo(x, y);
+
+    if (e.touches) {
+      return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top,
+      };
+    } else {
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
+    }
   };
 
-  const draw = (e) => {
-    if (!isDrawing) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    ctx.lineTo(x, y);
-    ctx.stroke();
-  };
+  const startDrawing = (e) => {
+  setIsDrawing(true);
+  const { x, y } = getCoords(e);
+  const ctx = canvasRef.current.getContext('2d');
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+};
+
+const draw = (e) => {
+  if (!isDrawing) return;
+  const { x, y } = getCoords(e);
+  const ctx = canvasRef.current.getContext('2d');
+  ctx.lineTo(x, y);
+  ctx.stroke();
+};
 
   const endDrawing = () => {
     if (!isDrawing) return;
@@ -306,12 +315,17 @@ const CanvasFirma = ({ onFirmaComplete }) => {
       <div className="canvas-wrapper">
         <canvas
           ref={canvasRef}
-          width={400}
-          height={200}
+          width={600}
+          height={300}
           onMouseDown={startDrawing}
           onMouseMove={draw}
           onMouseUp={endDrawing}
           onMouseLeave={endDrawing}
+          onTouchStart={startDrawing}
+          onTouchMove={draw}
+          onTouchEnd={endDrawing}
+          onTouchCancel={endDrawing}
+          style={{ touchAction: "none", cursor: "crosshair" }} // 👈 clave en móviles
         />
       </div>
       <div className="canvas-actions">
@@ -322,5 +336,6 @@ const CanvasFirma = ({ onFirmaComplete }) => {
     </div>
   );
 };
+
 
 export default FirmaDesdeAccess;
