@@ -30,6 +30,21 @@
   --color-error: #ef4444;
 }
 
+/* Reglas para que las imágenes se adapten mejor */
+img {
+  max-width: 120px; /* Ajusta el tamaño máximo */
+  height: auto;     /* Mantiene la proporción */
+  border-radius: 8px; /* Opcional, bordes redondeados */
+}
+
+/* Si quieres que ocupen todo el ancho disponible */
+.paciente-row img,
+.paciente-card img {
+  width: 100px;   /* Aumenta el tamaño fijo */
+  height: auto;   /* Mantiene la proporción */
+}
+
+
 .lista-pacientes-container {
   height: 100vh;
   width: 100vw;
@@ -539,11 +554,12 @@
 @media (max-width: 768px) {
   /* Ocultar tabla y mostrar tarjetas en móvil */
   .pacientes-table-container {
-    display: none;
+    display: block;   
+    overflow-x: auto; 
   }
 
   .pacientes-cards {
-    display: flex;
+    display: flex;   /* Deja activadas también las tarjetas */
   }
 
   .lista-pacientes-header {
