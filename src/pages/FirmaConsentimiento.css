@@ -1,175 +1,190 @@
-/* Variables CSS para modo claro/oscuro */
+/* FirmaConsentimiento.css - VERSIÓN CON SCROLL INTERNO PARA EL CONTENIDO */
+
 :root {
-  /* Colores modo claro */
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
-  --secondary-color: #64748b;
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --error-color: #ef4444;
-  --background-color: #ffffff;
-  --surface-color: #f8fafc;
-  --surface-elevated: #ffffff;
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
-  --border-color: #e2e8f0;
-  --border-hover: #cbd5e1;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+  --color-fondo: #f8fafc;
+  --color-texto: #1e293b;
+  --color-bordes: #e2e8f0;
+  --color-primario: #3b82f6;
+  --color-primario-hover: #2563eb;
+  --color-secundario: #64748b;
+  --color-tarjeta: #ffffff;
+  --color-hover: #f1f5f9;
+  --color-sombra: rgba(0, 0, 0, 0.1);
+  --color-exito: #10b981;
+  --color-advertencia: #f59e0b;
+  --color-error: #ef4444;
 }
 
 [data-theme="dark"] {
-  /* Colores modo oscuro */
-  --primary-color: #3b82f6;
-  --primary-hover: #2563eb;
-  --secondary-color: #94a3b8;
-  --success-color: #10b981;
-  --warning-color: #f59e0b;
-  --error-color: #ef4444;
-  --background-color: #0f172a;
-  --surface-color: #1e293b;
-  --surface-elevated: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --border-color: #334155;
-  --border-hover: #475569;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+  --color-fondo: #0f172a;
+  --color-texto: #e2e8f0;
+  --color-bordes: #334155;
+  --color-primario: #60a5fa;
+  --color-primario-hover: #93c5fd;
+  --color-secundario: #94a3b8;
+  --color-tarjeta: #1e293b;
+  --color-hover: #334155;
+  --color-sombra: rgba(0, 0, 0, 0.3);
+  --color-exito: #10b981;
+  --color-advertencia: #f59e0b;
+  --color-error: #ef4444;
 }
 
-/* Reset y base */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* 1. Forzar full-screen y quitar márgenes externos potenciales */
-html, body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden; /* si quieres evitar doble scroll; si no, pon auto */
-}
-
-/* 2. Hacer que el contenedor principal sea full-bleed */
 .firma-container {
-  width: 100vw !important;
-  min-width: 100vw !important;
-  max-width: 100vw !important;
-  height: 100vh !important;
-  min-height: 100vh !important;
-  padding: 0.75rem 1rem !important; /* conserva algo de padding; ajusta si quieres */
-  margin: 0 auto !important;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  background: var(--background-color);
+  background: var(--color-fondo);
   overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
-
-/* Header mejorado */
 .firma-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  background: var(--surface-elevated);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-color);
-  margin-bottom: 1rem;
+  background: var(--color-tarjeta);
+  border-bottom: 1px solid var(--color-bordes);
+  box-shadow: 0 2px 4px var(--color-sombra);
   flex-shrink: 0;
+  min-height: 70px;
 }
 
 .firma-header h1 {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 60%;
+  color: var(--color-texto);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .header-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
   align-items: center;
 }
 
-/* Contenedor principal de contenido con scroll */
 .firma-content {
-  display: flex;
-  gap: 1.5rem;
-  flex: 1 1 auto;
-  width: 100%;
-  min-height: 0; /* importante para permitir que el overflow funcione en hijos */
-  overflow: hidden;
-  align-items: stretch;
-}
-
-/* Ajuste de las columnas: left más flexible, right ancho relativo (no fijo) */
-.content-left {
-  flex: 1 1 65%; /* ocupa ~65% del ancho */
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  overflow: hidden;
-  min-width: 0; /* evita overflow horizontal por hijos */
-}
-
-.content-right {
-  flex: 0 0 35%; /* ocupa ~35% del ancho; ajusta según prefieras */
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  min-width: 320px; /* evita que se colapse en pantallas grandes */
-  max-width: 48ch;
-  overflow: hidden;
-}
-
-@media (min-width: 1600px) {
-  .content-left { flex: 1 1 70%; }
-  .content-right { flex: 0 0 30%; }
-}
-
-/* Información del paciente mejorada */
-.paciente-info {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-lg);
+  flex: 1;
+  overflow-y: auto; /* ahora el scroll es general */
   padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
+  gap: 1.5rem;
+  height: auto; /* quitar la altura forzada */
+}
+
+/* Panel izquierdo - Información del paciente y consentimiento CON SCROLL INTERNO */
+.firma-panel-izquierdo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+  overflow: hidden;
+  max-height: 100%;
+}
+
+/* Panel derecho - Área de firma */
+.firma-panel-derecho {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 300px;
+  overflow: hidden;
+  max-height: 100%;
+}
+
+/* CONTENEDOR DE CONSENTIMIENTO CON SCROLL INTERNO MEJORADO */
+.consentimiento-info {
+  flex: unset; /* antes: flex: 1 */
+  max-height: none; /* para que crezca libre */
+  overflow: visible; /* deja que fluya */
+}
+.consentimiento-info h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-bordes);
+}
+
+.consentimiento-content {
+  flex: unset;
+  max-height: none;
+  overflow: visible;
+  padding-right: 0; /* opcional */
+}
+
+/* Secciones de contenido del consentimiento */
+.content-section {
+  background: var(--color-fondo);
+  padding: 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--color-primario);
+  transition: all 0.3s ease;
+}
+
+.content-section:hover {
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px var(--color-sombra);
+}
+
+.content-section h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-bordes);
+  padding-bottom: 0.5rem;
+}
+
+.content-section p {
+  margin: 0;
+  color: var(--color-texto);
+  line-height: 1.6;
+  font-size: 0.9rem;
+  white-space: pre-line;
+}
+
+/* Información del paciente */
+.paciente-info {
+  background: var(--color-tarjeta);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px var(--color-sombra);
+  border: 1px solid var(--color-bordes);
   flex-shrink: 0;
 }
 
 .paciente-info h3 {
   margin: 0 0 1rem 0;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-texto);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.paciente-info h3::before {
-  content: "";
-  width: 4px;
-  height: 1.5rem;
-  background: var(--primary-color);
-  border-radius: var(--radius-sm);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-bordes);
 }
 
 .info-grid {
@@ -181,9 +196,9 @@ html, body {
 .info-item {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
   padding: 0.5rem 0;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--color-bordes);
 }
 
 .info-item:last-child {
@@ -192,120 +207,79 @@ html, body {
 
 .info-label {
   font-weight: 600;
-  color: var(--text-secondary);
-  min-width: 140px;
-}
-
-.info-value {
-  color: var(--text-primary);
-  text-align: right;
-  flex: 1;
-  margin-left: 1rem;
-}
-
-/* Consentimiento con scroll mejorado */
-.consentimiento-info {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.consentimiento-info h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-secundario);
+  min-width: 120px;
   flex-shrink: 0;
 }
 
-.consentimiento-content {
+.info-value {
+  color: var(--color-texto);
+  text-align: right;
   flex: 1;
-  overflow-y: auto;
-  padding-right: 0.5rem;
+  margin-left: 1rem;
+  word-break: break-word;
 }
 
-.content-section {
-  background: var(--surface-color);
-  padding: 1rem;
-  border-radius: var(--radius-md);
-  margin-bottom: 1rem;
-  border-left: 4px solid var(--primary-color);
-}
-
-.content-section h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.content-section p {
-  margin: 0;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
-
-/* Scrollbar personalizado */
-.consentimiento-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.consentimiento-content::-webkit-scrollbar-track {
-  background: var(--surface-color);
-  border-radius: var(--radius-sm);
-}
-
-.consentimiento-content::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: var(--radius-sm);
-}
-
-.consentimiento-content::-webkit-scrollbar-thumb:hover {
-  background: var(--border-hover);
-}
-
-/* Sección de firma mejorada */
+/* ÁREA DE FIRMA MEJORADA */
 .firma-section {
-  background: var(--surface-elevated);
-  border-radius: var(--radius-lg);
+  background: var(--color-tarjeta);
+  border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--color-sombra);
+  border: 1px solid var(--color-bordes);
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 400px;
+  overflow: hidden;
 }
 
 .firma-section h3 {
   margin: 0 0 1.5rem 0;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--color-texto);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   flex-shrink: 0;
 }
 
 .canvas-container {
-  text-align: center;
-  margin-bottom: 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  min-height: 300px;
+  overflow: hidden;
 }
 
 .canvas-wrapper {
   position: relative;
-  display: inline-block;
-  margin-bottom: 1rem;
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  max-height: 400px;
+  border: 3px dashed var(--color-bordes);
+  border-radius: 12px;
+  background: var(--color-fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background-image: 
+    linear-gradient(45deg, var(--color-bordes) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--color-bordes) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--color-bordes) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--color-bordes) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.canvas-wrapper:hover {
+  border-color: var(--color-primario);
 }
 
 .canvas-wrapper::before {
@@ -314,70 +288,66 @@ html, body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: var(--text-muted);
-  font-size: 1rem;
+  color: var(--color-secundario);
+  font-size: 1.1rem;
+  font-weight: 500;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.8;
+  z-index: 1;
+  background: var(--color-tarjeta);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px var(--color-sombra);
 }
 
 .canvas-wrapper.has-signature::before {
   display: none;
 }
 
-canvas {
-  border: 2px dashed var(--border-color);
-  border-radius: var(--radius-md);
-  background: var(--surface-color);
+.firma-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 10px;
   cursor: crosshair;
-  transition: border-color 0.2s ease;
-  max-width: 100%;
-  height: auto;
-}
-
-canvas:hover {
-  border-color: var(--border-hover);
+  position: relative;
+  z-index: 2;
+  background: transparent;
 }
 
 .canvas-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 1rem;
-}
-
-.firma-preview {
-  text-align: center;
-  padding: 1rem;
-  background: var(--surface-color);
-  border-radius: var(--radius-md);
-  margin-top: auto;
+  margin-top: 1.5rem;
   flex-shrink: 0;
 }
 
-.firma-preview img {
-  max-width: 100%;
-  max-height: 80px;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  background: white;
+.actions {
+  position: sticky; /* queda siempre visible */
+  bottom: 0;
+  background: var(--color-tarjeta);
+  padding: 1rem;
+  border-top: 1px solid var(--color-bordes);
+  z-index: 10;
 }
-
 /* Botones mejorados */
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: 8px;
   font-weight: 500;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  text-decoration: none;
   min-height: 44px;
+  min-width: 120px;
+  background: var(--color-primario);
+  color: white;
 }
 
 .btn:disabled {
@@ -387,13 +357,32 @@ canvas:hover {
 }
 
 .btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-sombra);
+  background: var(--color-primario-hover);
+}
+
+.btn-volver {
+  background: var(--color-secundario);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-volver::before {
+  content: "←";
+  font-weight: bold;
+}
+
+.btn-volver:hover:not(:disabled) {
+  background: var(--color-texto);
 }
 
 .btn-guardar {
-  background: var(--success-color);
+  background: var(--color-exito);
   color: white;
+  font-weight: 600;
 }
 
 .btn-guardar:hover:not(:disabled) {
@@ -401,7 +390,7 @@ canvas:hover {
 }
 
 .btn-cancelar {
-  background: var(--error-color);
+  background: var(--color-error);
   color: white;
 }
 
@@ -410,168 +399,384 @@ canvas:hover {
 }
 
 .btn-limpiar {
-  background: var(--warning-color);
+  background: var(--color-advertencia);
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   font-size: 0.8rem;
+  min-width: auto;
 }
 
 .btn-limpiar:hover:not(:disabled) {
   background: #e58e0c;
 }
 
-.btn-outline {
-  background: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-}
-
-.btn-outline:hover:not(:disabled) {
-  background: var(--surface-color);
-  border-color: var(--border-hover);
-}
-
 .theme-toggle {
-  width: 44px;
-  height: 44px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Actions siempre visibles */
-.actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  padding: 1.5rem 0;
-  margin-top: 1rem;
-  flex-shrink: 0;
-  background: var(--background-color);
-  border-top: 1px solid var(--border-color);
-}
-
-/* Estados de carga y error */
-.loading-container, .error-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50vh;
-  text-align: center;
-  padding: 2rem;
-}
-
-.spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid var(--border-color);
-  border-left: 4px solid var(--primary-color);
+  background: none;
+  border: 2px solid var(--color-bordes);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.theme-toggle:hover {
+  border-color: var(--color-primario);
+  transform: scale(1.05);
 }
 
-.error-container h3 {
-  color: var(--error-color);
-  margin-bottom: 1rem;
+/* SCROLLBARS PERSONALIZADAS */
+.firma-panel-izquierdo::-webkit-scrollbar,
+.firma-panel-derecho::-webkit-scrollbar,
+.consentimiento-content::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Responsive mejorado */
+.firma-panel-izquierdo::-webkit-scrollbar-track,
+.firma-panel-derecho::-webkit-scrollbar-track,
+.consentimiento-content::-webkit-scrollbar-track {
+  background: var(--color-bordes);
+  border-radius: 4px;
+}
+
+.firma-panel-izquierdo::-webkit-scrollbar-thumb,
+.firma-panel-derecho::-webkit-scrollbar-thumb,
+.consentimiento-content::-webkit-scrollbar-thumb {
+  background: var(--color-primario);
+  border-radius: 4px;
+}
+
+.firma-panel-izquierdo::-webkit-scrollbar-thumb:hover,
+.firma-panel-derecho::-webkit-scrollbar-thumb:hover,
+.consentimiento-content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primario-hover);
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .firma-content {
     flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    height: calc(100vh - 70px);
     overflow-y: auto;
   }
-  
-  .content-right {
-    flex: 0 0 auto;
+
+  .firma-panel-derecho {
+    max-width: none;
+    min-width: auto;
+    flex: 1;
+  }
+
+  .firma-section {
     min-height: 400px;
   }
-  
-  .consentimiento-content {
+
+  .canvas-wrapper {
+    min-height: 200px;
     max-height: 300px;
+  }
+
+  .consentimiento-content {
+    max-height: calc(100% - 2.5rem);
   }
 }
 
 @media (max-width: 768px) {
-  .firma-container {
-    padding: 0.5rem;
-    height: 100vh;
-  }
-  
   .firma-header {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
+    min-height: 60px;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
-  
+
   .firma-header h1 {
-    max-width: 100%;
     font-size: 1.1rem;
+    flex: 1;
   }
-  
+
   .header-actions {
     width: 100%;
-    justify-content: center;
+    justify-content: space-between;
+    order: 2;
   }
-  
+
+  .firma-content {
+    padding: 1rem;
+    gap: 1rem;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+  }
+
+  .paciente-info, .consentimiento-info, .firma-section {
+    padding: 1rem;
+  }
+
+  .canvas-wrapper {
+    min-height: 180px;
+    max-height: 250px;
+  }
+
   .info-item {
     flex-direction: column;
     gap: 0.25rem;
-    text-align: left;
+    align-items: flex-start;
   }
-  
+
   .info-value {
     text-align: left;
     margin-left: 0;
+    width: 100%;
   }
-  
-  .info-label {
-    min-width: auto;
-    font-weight: 700;
+
+  .content-section {
+    padding: 1rem;
   }
-  
+
   .actions {
     flex-direction: column;
     align-items: center;
+    padding: 1rem;
   }
-  
+
   .btn {
     width: 100%;
     max-width: 300px;
   }
-  
-  canvas {
-    width: 100% !important;
-    max-width: 100% !important;
+
+  .canvas-actions {
+    flex-direction: column;
+    align-items: center;
   }
-  
-  .content-right {
-    flex: 0 0 auto;
+
+  .btn-limpiar {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .consentimiento-content {
+    max-height: calc(100% - 2rem);
   }
 }
 
-/* Mejoras de accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+@media (max-width: 480px) {
+  .firma-header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .firma-header h1 {
+    font-size: 1rem;
+  }
+
+  .firma-content {
+    padding: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .paciente-info, .consentimiento-info, .firma-section {
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .canvas-wrapper {
+    min-height: 150px;
+    max-height: 200px;
+  }
+
+  .canvas-wrapper::before {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    text-align: center;
+    width: 80%;
+  }
+
+  .content-section {
+    padding: 0.75rem;
+  }
+
+  .content-section h4 {
+    font-size: 0.9rem;
+  }
+
+  .content-section p {
+    font-size: 0.85rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+    min-height: 40px;
+  }
+
+  .consentimiento-content {
+    max-height: calc(100% - 1.5rem);
   }
 }
 
-/* Focus visible para accesibilidad */
-.btn:focus-visible,
-canvas:focus-visible,
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
+/* FirmaConsentimiento.css - VERSIÓN MEJORADA PARA TÁCTIL */
+
+/* ... (mantener todas las variables y estilos anteriores) ... */
+
+/* ÁREA DE FIRMA MEJORADA PARA DISPOSITIVOS TÁCTILES */
+.firma-section {
+  background: var(--color-tarjeta);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px var(--color-sombra);
+  border: 1px solid var(--color-bordes);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+.canvas-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  min-height: 300px;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+.canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  border: 3px dashed var(--color-bordes);
+  border-radius: 12px;
+  background: var(--color-fondo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background-image: 
+    linear-gradient(45deg, var(--color-bordes) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--color-bordes) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--color-bordes) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--color-bordes) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  flex: 1;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.firma-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 10px;
+  cursor: crosshair;
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+
+/* Instrucciones para móvil */
+.firma-instructions {
+  text-align: center;
+  margin-top: 0.5rem;
+  color: var(--color-secundario);
+  font-size: 0.8rem;
+}
+
+/* Mejoras específicas para dispositivos táctiles */
+@media (hover: none) and (pointer: coarse) {
+  .canvas-wrapper::before {
+    content: "Toque y deslice para firmar";
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  
+  .firma-canvas {
+    cursor: pointer;
+  }
+  
+  .canvas-wrapper {
+    border-width: 4px;
+  }
+}
+
+/* Mejoras para tablets */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .canvas-wrapper {
+    min-height: 300px;
+  }
+}
+
+/* Mejoras para móviles */
+@media (max-width: 767px) {
+  .canvas-wrapper {
+    min-height: 200px;
+    border-width: 4px;
+  }
+  
+  .canvas-wrapper::before {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+    text-align: center;
+  }
+  
+  .firma-section {
+    min-height: 350px;
+  }
+  
+  .firma-instructions {
+    font-size: 0.75rem;
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .canvas-wrapper {
+    min-height: 180px;
+  }
+  
+  .firma-section {
+    min-height: 320px;
+    padding: 1rem;
+  }
+  
+  .canvas-container {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Prevenir zoom en iOS al tocar el canvas */
+@supports (-webkit-touch-callout: none) {
+  .firma-canvas {
+    touch-action: pan-x pan-y;
+  }
+}
+
+/* Mejorar el feedback táctil */
+.canvas-wrapper:active {
+  border-color: var(--color-primario);
+}
+
+.firma-canvas:active {
+  cursor: grabbing;
 }

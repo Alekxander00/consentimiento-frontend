@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { jsPDF } from 'jspdf';
+import { useNavigate } from 'react-router-dom';
 import './FirmaConsentimiento.css';
 
 const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
@@ -23,9 +23,16 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [posicion, setPosicion] = useState({ x: 0, y: 0 });
   const busquedaRef = useRef(null);
+  
+  const navigate = useNavigate();
 
   // URL base desde variable de entorno
   const API_URL = 'https://backend-consentimientos-production.up.railway.app';
+
+  // Función de cierre que redirige a lista-pacientes
+  const handleClose = () => {
+    navigate('/lista-pacientes');
+  };
 
   // Cargar profesionales al abrir el modal
   useEffect(() => {
@@ -33,7 +40,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
       try {
         setLoading(true);
         const API_URL = import.meta.env.VITE_API_URL || '/api';
-      const response = await fetch(`${API_URL}/profesionales`);
+        const response = await fetch(`${API_URL}/profesionales`);
         
         if (!response.ok) {
           throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -64,6 +71,18 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
     };
   }, [API_URL]);
 
+  // Inicializar canvas
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.lineWidth = 3; // Línea más gruesa para mejor visibilidad en móviles
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#000';
+    }
+  }, []);
+
   // Filtrar profesionales según la búsqueda
   const profesionalesFiltrados = busquedaProfesional
     ? profesionales.filter(p =>
@@ -72,36 +91,68 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
       )
     : profesionales;
 
-  // Iniciar dibujo de firma
+  // Obtener coordenadas del touch/mouse
+  const getCoordinates = (e) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    let clientX, clientY;
+    
+    if (e.type.includes('touch')) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
+  // Iniciar dibujo de firma - MEJORADO PARA TÁCTIL
   const startDrawing = (e) => {
+    if (loading) return;
+    
+    // Prevenir comportamiento por defecto en dispositivos táctiles
+    if (e.type.includes('touch')) {
+      e.preventDefault();
+    }
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const { x, y } = getCoordinates(e);
+    const ctx = canvas.getContext('2d');
+    
+    ctx.beginPath();
+    ctx.moveTo(x, y);
     
     setPosicion({ x, y });
     setIsDrawing(true);
   };
 
-  // Dibujar firma
+  // Dibujar firma - MEJORADO PARA TÁCTIL
   const draw = (e) => {
-    if (!isDrawing) return;
+    if (!isDrawing || loading) return;
+    
+    // Prevenir comportamiento por defecto en dispositivos táctiles
+    if (e.type.includes('touch')) {
+      e.preventDefault();
+    }
     
     const canvas = canvasRef.current;
     if (!canvas) return;
     
+    const { x, y } = getCoordinates(e);
     const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
     
-    ctx.beginPath();
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#000';
-    ctx.moveTo(posicion.x, posicion.y);
     ctx.lineTo(x, y);
     ctx.stroke();
     
@@ -187,14 +238,11 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
         const resultado = await responseBackend.json();
         
         // Descargar el PDF desde el backend
-        const pdfWindow = window.open(`${API_URL}/generar-pdf/${resultado.id}`, '_blank');
+        window.open(`${API_URL}/generar-pdf/${resultado.id}`, '_blank');
         
-        // Esperar a que se abra la ventana del PDF
-        setTimeout(() => {
-          alert('Consentimiento firmado y guardado correctamente. El PDF se está descargando.');
-          if (onSave) onSave();
-          if (onClose) onClose();
-        }, 1000);
+        alert('Consentimiento firmado y guardado correctamente. El PDF se está descargando.');
+        if (onSave) onSave();
+        handleClose();
         
       } else {
         const errorData = await responseBackend.json();
@@ -209,17 +257,81 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
   };
 
   return (
-    <div className="firma-modal-overlay">
-      <div className="firma-modal">
-        <div className="modal-header">
-          <h2>Firmar Consentimiento: {consentimiento.nombre}</h2>
-          <button className="close-btn" onClick={onClose} disabled={loading}>×</button>
+    <div className="firma-container">
+      <div className="firma-header">
+        <h1>Firma Consentimiento - {consentimiento.nombre}</h1>
+        <div className="header-actions">
+          <button className="btn-volver" onClick={handleClose} disabled={loading}>
+            Volver a lista de pacientes
+          </button>
+          <button className="btn-cerrar" onClick={handleClose} disabled={loading}>
+            Cerrar
+          </button>
+        </div>
+      </div>
+
+      <div className="firma-content">
+        {/* Panel izquierdo - Información del paciente y consentimiento */}
+        <div className="firma-panel-izquierdo">
+          {/* Información del paciente */}
+          <div className="paciente-info">
+            <h3>Datos del Paciente</h3>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="info-label">Nombre:</span>
+                <span className="info-value">{datosPaciente.nombre || 'No especificado'}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Identificación:</span>
+                <span className="info-value">{datosPaciente.identificacion || 'No especificado'}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Teléfono:</span>
+                <span className="info-value">{datosPaciente.telefono || 'No especificado'}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Dirección:</span>
+                <span className="info-value">{datosPaciente.direccion || 'No especificado'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Consentimiento informado */}
+          <div className="consentimiento-info">
+            <h3>Consentimiento: {consentimiento.nombre}</h3>
+            <div className="consentimiento-content">
+              <div className="content-section">
+                <h4>Información General</h4>
+                <p>{consentimiento.descripcion || 'Información detallada sobre el procedimiento...'}</p>
+              </div>
+              
+              <div className="content-section">
+                <h4>Contraindicaciones</h4>
+                <p>Paciente con glaucoma estrecho sin tratamiento. Paciente con arteriosclerosis severo, enfermedad cardiovascular o cerebrovascular.</p>
+              </div>
+              
+              <div className="content-section">
+                <h4>Requisitos para el Procedimiento</h4>
+                <p>Debe presentarse en compañía de una persona mayor de edad responsable de su atención, que podrá suministrar información adicional en caso de ser requerido, así mismo acompañar al paciente durante la preparación, prestación del servicio y mientras está presente el efecto del medicamento.</p>
+              </div>
+
+              <div className="content-section">
+                <h4>Declaraciones del Paciente</h4>
+                <p><strong>Aceptación:</strong> {datosPaciente.aceptacion}</p>
+                <p><strong>Declaración:</strong> {datosPaciente.declaracion}</p>
+                {datosPaciente.observaciones && (
+                  <p><strong>Observaciones:</strong> {datosPaciente.observaciones}</p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="modal-content">
-          {/* Sección de selección de profesional */}
-          <div className="seccion-profesional">
-            <h3>Profesional que atiende *</h3>
+        {/* Panel derecho - Área de firma y datos profesionales */}
+        <div className="firma-panel-derecho">
+          {/* Selección de profesional */}
+          <div className="paciente-info">
+            <h3>Profesional que Atiende</h3>
             <div className="busqueda-profesional" ref={busquedaRef}>
               <input
                 type="text"
@@ -231,6 +343,7 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
                 }}
                 onFocus={() => setMostrarListaProfesionales(true)}
                 disabled={loading}
+                className="search-input"
               />
               {mostrarListaProfesionales && profesionalesFiltrados.length > 0 && (
                 <div className="lista-profesionales">
@@ -256,150 +369,68 @@ const FirmaConsentimiento = ({ consentimiento, onClose, onSave }) => {
             </div>
             
             {profesionalSeleccionado && (
-              <div className="info-profesional">
-                <h4>Profesional seleccionado:</h4>
+              <div className="info-profesional-seleccionado">
+                <h4>Profesional Seleccionado:</h4>
                 <p><strong>Nombre:</strong> {profesionalSeleccionado.nombre}</p>
                 <p><strong>Identificación:</strong> {profesionalSeleccionado.identificacion}</p>
                 <p><strong>Especialidad:</strong> {profesionalSeleccionado.especialidad}</p>
                 {profesionalSeleccionado.registro_profesional && (
                   <p><strong>Registro profesional:</strong> {profesionalSeleccionado.registro_profesional}</p>
                 )}
-                <button 
-                  type="button" 
-                  className="btn-cambiar-profesional"
-                  onClick={() => {
-                    setProfesionalSeleccionado(null);
-                    setBusquedaProfesional('');
-                  }}
-                  disabled={loading}
-                >
-                  Cambiar profesional
-                </button>
               </div>
             )}
           </div>
 
-          {/* Datos del paciente */}
-          <div className="seccion-datos">
-            <h3>Datos del Paciente</h3>
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Nombre completo *</label>
-                <input
-                  type="text"
-                  value={datosPaciente.nombre}
-                  onChange={(e) => setDatosPaciente({...datosPaciente, nombre: e.target.value})}
-                  required
-                  disabled={loading}
+          {/* Área de firma MEJORADA PARA TÁCTIL */}
+          <div className="firma-section">
+            <h3>Firma del Paciente</h3>
+            <div className="canvas-container">
+              <div className={`canvas-wrapper ${firmaData ? 'has-signature' : ''}`}>
+                <canvas
+                  ref={canvasRef}
+                  width={600}
+                  height={300}
+                  // Eventos de mouse
+                  onMouseDown={startDrawing}
+                  onMouseMove={draw}
+                  onMouseUp={stopDrawing}
+                  onMouseLeave={stopDrawing}
+                  // Eventos táctiles MEJORADOS
+                  onTouchStart={startDrawing}
+                  onTouchMove={draw}
+                  onTouchEnd={stopDrawing}
+                  onTouchCancel={stopDrawing}
+                  className="firma-canvas"
+                  style={{ 
+                    cursor: loading ? 'not-allowed' : 'crosshair',
+                    touchAction: 'none' // Importante: previene el scroll al dibujar
+                  }}
                 />
               </div>
-              
-              <div className="form-group">
-                <label>Identificación *</label>
-                <input
-                  type="text"
-                  value={datosPaciente.identificacion}
-                  onChange={(e) => setDatosPaciente({...datosPaciente, identificacion: e.target.value})}
-                  required
-                  disabled={loading}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Teléfono</label>
-                <input
-                  type="tel"
-                  value={datosPaciente.telefono}
-                  onChange={(e) => setDatosPaciente({...datosPaciente, telefono: e.target.value})}
-                  disabled={loading}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Dirección</label>
-                <input
-                  type="text"
-                  value={datosPaciente.direccion}
-                  onChange={(e) => setDatosPaciente({...datosPaciente, direccion: e.target.value})}
-                  disabled={loading}
-                />
+            </div>
+            <div className="canvas-actions">
+              <button onClick={clearSignature} className="btn-limpiar" disabled={loading}>
+                Limpiar Firma
+              </button>
+              <div className="firma-instructions">
+                <small>En móvil: Deslice el dedo para firmar</small>
               </div>
             </div>
           </div>
 
-          {/* Área de firma */}
-          <div className="seccion-firma">
-            <h3>Firma del Paciente *</h3>
-            <div className="firma-container">
-              <canvas
-                ref={canvasRef}
-                width={600}
-                height={200}
-                onMouseDown={startDrawing}
-                onMouseMove={draw}
-                onMouseUp={stopDrawing}
-                onMouseLeave={stopDrawing}
-                className="firma-canvas"
-                style={{ cursor: loading ? 'not-allowed' : 'crosshair' }}
-                disabled={loading}
-              />
-              <div className="firma-acciones">
-                <button onClick={clearSignature} className="btn-limpiar" disabled={loading}>
-                  Limpiar Firma
-                </button>
-                <span className="firma-instructions">
-                  Firme en el área superior
-                </span>
-              </div>
-            </div>
+          {/* Acciones principales */}
+          <div className="actions">
+            <button onClick={handleClose} className="btn-cancelar" disabled={loading}>
+              Cancelar
+            </button>
+            <button 
+              onClick={guardarConsentimientoFirmado} 
+              className="btn-guardar"
+              disabled={!firmaData || !datosPaciente.nombre || !datosPaciente.identificacion || !profesionalSeleccionado || loading}
+            >
+              {loading ? 'Guardando...' : 'Guardar Consentimiento Firmado'}
+            </button>
           </div>
-
-          {/* Declaraciones */}
-          <div className="seccion-declaraciones">
-            <h3>Declaraciones</h3>
-            <div className="form-group">
-              <label>Aceptación del procedimiento</label>
-              <input
-                type="text"
-                value={datosPaciente.aceptacion}
-                onChange={(e) => setDatosPaciente({...datosPaciente, aceptacion: e.target.value})}
-                disabled={loading}
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Declaración de información</label>
-              <input
-                type="text"
-                value={datosPaciente.declaracion}
-                onChange={(e) => setDatosPaciente({...datosPaciente, declaracion: e.target.value})}
-                disabled={loading}
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Observaciones adicionales</label>
-              <textarea
-                value={datosPaciente.observaciones}
-                onChange={(e) => setDatosPaciente({...datosPaciente, observaciones: e.target.value})}
-                rows="3"
-                disabled={loading}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="modal-footer">
-          <button onClick={onClose} className="btn-cancelar" disabled={loading}>
-            Cancelar
-          </button>
-          <button 
-            onClick={guardarConsentimientoFirmado} 
-            className="btn-guardar"
-            disabled={!firmaData || !datosPaciente.nombre || !datosPaciente.identificacion || !profesionalSeleccionado || loading}
-          >
-            {loading ? 'Guardando...' : 'Guardar y Generar PDF'}
-          </button>
         </div>
       </div>
     </div>

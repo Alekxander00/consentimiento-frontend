@@ -49,14 +49,13 @@ const ListaPacientes = () => {
   };
 
   const handleDobleClickPaciente = (paciente) => {
-    // Abrir ventana de firma con los datos del paciente
-    const url = `/firma-acces?id_paciente=${paciente.id_access}`; //&id_consentimiento=${paciente.consentimiento_id || ''}
+    const url = `/firma-acces?id_paciente=${paciente.id_access}`;
     window.location.href = url;
   };
 
-  const handleEditarPaciente = (paciente, e) => {
-    e.stopPropagation();
-    console.log('Editar paciente:', paciente);
+  const handleClickFirmar = (paciente, e) => {
+    e?.stopPropagation();
+    handleDobleClickPaciente(paciente);
   };
 
   // Filtrar pacientes según la búsqueda
@@ -90,7 +89,12 @@ const ListaPacientes = () => {
   return (
     <div className="lista-pacientes-container">
       <header className="lista-pacientes-header">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhBCSDxk3yzp9ndJpq1YTQKpn3mZiS1MtwdSyB1mi1IyRARG8SC4aSfYRH3AG-NIq7C9o" alt="Logo" className="logo" />
+        <img 
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhBCSDxk3yzp9ndJpq1YTQKpn3mZiS1MtwdSyB1mi1IyRARG8SC4aSfYRH3AG-NIq7C9o" 
+          alt="Logo" 
+          className="logo" 
+          style={{height: '40px', width: 'auto'}}
+        />
         <h1>Consentimientos por firmar</h1>
         <div className="header-actions">
           <div className="search-container">
@@ -101,7 +105,7 @@ const ListaPacientes = () => {
               onChange={(e) => setBusqueda(e.target.value)}
               className="search-input"
             />
-            <span className="search-icon"></span>
+            <span className="search-icon">🔍</span>
           </div>
           <button 
             className="btn btn-outline theme-toggle"
@@ -133,66 +137,126 @@ const ListaPacientes = () => {
         </div>
       </div>
 
-      <div className="pacientes-table-container">
-        <table className="pacientes-table">
-          <thead>
-            <tr>
-              <th>Nombre del Paciente</th>
-              <th>Identificación</th>
-              <th>Consentimiento</th>
-              <th>Especialidad</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pacientesFiltrados.length === 0 ? (
-              <tr>
-                <td colSpan="6" className="no-data">
-                  {busqueda ? 'No se encontraron pacientes que coincidan con la búsqueda' : 'No hay pacientes pendientes por firmar'}
-                </td>
-              </tr>
-            ) : (
-              pacientesFiltrados.map((paciente) => (
-                <tr 
-                  key={paciente.id_access} 
-                  className="paciente-row"
-                  onDoubleClick={() => handleDobleClickPaciente(paciente)}
-                  title="Doble clic para abrir ventana de firma"
-                >
-                  <td className="paciente-nombre">{paciente.paciente_nombre}</td>
-                  <td className="paciente-identificacion">{paciente.paciente_identificacion}</td>
-                  <td className="consentimiento-nombre">
-                    {paciente.nombre_consentimiento || 'Sin consentimiento asignado'}
-                  </td>
-                  <td className="especialidad">
-                    {paciente.nombre_especialidad || 'No especificada'}
-                  </td>
-                  <td className="estado">
-                    <span className={`badge ${paciente.firmado ? 'badge-success' : 'badge-warning'}`}>
-                      {paciente.firmado ? '✅ Firmado' : '⏳ Pendiente'}
+      <div className="pacientes-content">
+        {/* Vista de tabla para desktop */}
+        <div className="pacientes-table-container">
+          <div className="pacientes-table-wrapper">
+            <table className="pacientes-table">
+              <thead>
+                <tr>
+                  <th>Nombre del Paciente</th>
+                  <th>Identificación</th>
+                  <th>Consentimiento</th>
+                  <th>Especialidad</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pacientesFiltrados.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="no-data">
+                      {busqueda ? 'No se encontraron pacientes que coincidan con la búsqueda' : 'No hay pacientes pendientes por firmar'}
+                    </td>
+                  </tr>
+                ) : (
+                  pacientesFiltrados.map((paciente) => (
+                    <tr 
+                      key={paciente.id_access} 
+                      className="paciente-row"
+                      onDoubleClick={() => handleDobleClickPaciente(paciente)}
+                      title="Doble clic para abrir ventana de firma"
+                    >
+                      <td className="paciente-nombre">{paciente.paciente_nombre}</td>
+                      <td className="paciente-identificacion">{paciente.paciente_identificacion}</td>
+                      <td className="consentimiento-nombre">
+                        {paciente.nombre_consentimiento || 'Sin consentimiento asignado'}
+                      </td>
+                      <td className="especialidad">
+                        {paciente.nombre_especialidad || 'No especificada'}
+                      </td>
+                      <td className="estado">
+                        <span className={`badge ${paciente.firmado ? 'badge-completado' : 'badge-pendiente'}`}>
+                          {paciente.firmado ? '✅ Firmado' : '⏳ Pendiente'}
+                        </span>
+                      </td>
+                      <td className="acciones">
+                        <button 
+                          onClick={(e) => handleClickFirmar(paciente, e)}
+                          className="btn btn-firmar btn-sm"
+                          title="Abrir ventana de firma"
+                          disabled={paciente.firmado}
+                        >
+                          📝 {paciente.firmado ? 'Firmado' : 'Firmar'}
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Vista de tarjetas para móvil */}
+        <div className="pacientes-cards">
+          {pacientesFiltrados.length === 0 ? (
+            <div className="no-data">
+              {busqueda ? 'No se encontraron pacientes que coincidan con la búsqueda' : 'No hay pacientes pendientes por firmar'}
+            </div>
+          ) : (
+            pacientesFiltrados.map((paciente) => (
+              <div 
+                key={paciente.id_access} 
+                className="paciente-card"
+                onClick={() => handleDobleClickPaciente(paciente)}
+              >
+                <div className="paciente-card-header">
+                  <div>
+                    <div className="paciente-card-nombre">{paciente.paciente_nombre}</div>
+                    <div className="paciente-card-identificacion">{paciente.paciente_identificacion}</div>
+                  </div>
+                  <span className={`badge ${paciente.firmado ? 'badge-completado' : 'badge-pendiente'}`}>
+                    {paciente.firmado ? 'Firmado' : 'Pendiente'}
+                  </span>
+                </div>
+                
+                <div className="paciente-card-body">
+                  <div className="paciente-card-row">
+                    <span className="paciente-card-label">Consentimiento:</span>
+                    <span className="paciente-card-value">
+                      {paciente.nombre_consentimiento || 'Sin asignar'}
                     </span>
-                  </td>
-                  <td className="acciones">
+                  </div>
+                  
+                  <div className="paciente-card-row">
+                    <span className="paciente-card-label">Especialidad:</span>
+                    <span className="paciente-card-value">
+                      {paciente.nombre_especialidad || 'No especificada'}
+                    </span>
+                  </div>
+                  
+                  <div className="paciente-card-actions">
                     <button 
-                      onClick={() => handleDobleClickPaciente(paciente)}
-                      className="btn btn-primary btn-sm"
-                      title="Abrir ventana de firma"
+                      onClick={(e) => handleClickFirmar(paciente, e)}
+                      className="btn btn-firmar"
                       disabled={paciente.firmado}
                     >
-                      📝 {paciente.firmado ? 'Firmado' : 'Firmar'}
+                      📝 {paciente.firmado ? 'Ya firmado' : 'Firmar consentimiento'}
                     </button>
-                    
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
       <div className="instrucciones">
-        <p>💡 <strong>Instrucciones:</strong> Haz doble clic en cualquier fila o presiona el botón "Firmar" para abrir la ventana de firma de consentimientos. Solo se muestran pacientes pendientes por firmar.</p>
+        <p>
+          💡 <strong>Instrucciones:</strong> Haz doble clic en cualquier fila o presiona el botón "Firmar" 
+          para abrir la ventana de firma de consentimientos. Solo se muestran pacientes pendientes por firmar.
+        </p>
       </div>
     </div>
   );
