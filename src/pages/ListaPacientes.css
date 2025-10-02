@@ -1,4 +1,4 @@
-/* ListaPacientes.css - VERSIÓN MEJORADA CON SCROLL Y TEMA OSCURO COMPLETO */
+/* ListaPacientes.css - VERSIÓN MEJORADA CON DISEÑO OPTIMIZADO */
 
 :root {
   --color-fondo: #f8fafc;
@@ -32,18 +32,16 @@
 
 /* Reglas para que las imágenes se adapten mejor */
 img {
-  max-width: 120px; /* Ajusta el tamaño máximo */
-  height: auto;     /* Mantiene la proporción */
-  border-radius: 8px; /* Opcional, bordes redondeados */
+  max-width: 120px;
+  height: auto;
+  border-radius: 8px;
 }
 
-/* Si quieres que ocupen todo el ancho disponible */
 .paciente-row img,
 .paciente-card img {
-  width: 100px;   /* Aumenta el tamaño fijo */
-  height: auto;   /* Mantiene la proporción */
+  width: 100px;
+  height: auto;
 }
-
 
 .lista-pacientes-container {
   height: 100vh;
@@ -60,7 +58,7 @@ img {
   left: 0;
 }
 
-/* Header mejorado */
+/* Header mejorado - Elementos en línea */
 .lista-pacientes-header {
   display: flex;
   justify-content: space-between;
@@ -86,11 +84,12 @@ img {
   gap: 0.5rem;
 }
 
-.header-actions {
+.header-controls {
   display: flex;
-  gap: 1rem;
   align-items: center;
-  flex-wrap: wrap;
+  gap: 1rem;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 /* Búsqueda mejorada */
@@ -100,7 +99,7 @@ img {
   align-items: center;
   flex: 1;
   max-width: 400px;
-  min-width: 250px;
+  min-width: 200px;
 }
 
 .search-input {
@@ -127,34 +126,43 @@ img {
   pointer-events: none;
 }
 
-/* Estadísticas mejoradas */
+.header-buttons {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Estadísticas mejoradas - Más pequeñas y solo dos contadores */
 .pacientes-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  display: flex;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  flex-direction: row;
   flex-shrink: 0;
 }
 
 .stat-card {
   background: var(--color-tarjeta);
-  padding: 1.25rem;
-  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
   border: 1px solid var(--color-bordes);
   text-align: center;
   transition: all 0.3s ease;
   cursor: pointer;
+  flex: 1;
+  max-width: none;
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px var(--color-sombra);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px var(--color-sombra);
   border-color: var(--color-primario);
 }
 
 .stat-number {
   display: block;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--color-primario);
   line-height: 1;
@@ -162,7 +170,7 @@ img {
 }
 
 .stat-label {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: var(--color-secundario);
   font-weight: 500;
 }
@@ -453,16 +461,22 @@ img {
 }
 
 .theme-toggle {
-  padding: 0.4rem 0.6rem;
-  font-size: 0.85rem;
-  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
+  background: var(--color-primario);
+  color: white;
+  border: none;
+  transition: all 0.3s ease;
+  min-height: 40px;
 }
 
 .theme-toggle:hover {
-  border-color: var(--color-primario);
-  transform: scale(1.05);
+  background: var(--color-primario-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--color-sombra);
 }
 
 /* Estados vacíos */
@@ -536,10 +550,6 @@ img {
     padding: 1.25rem;
   }
 
-  .pacientes-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .pacientes-table-container {
     max-height: calc(100vh - 280px);
   }
@@ -562,33 +572,35 @@ img {
     padding: 1rem;
   }
 
-  .header-actions {
-    justify-content: center;
+  .header-controls {
+    flex-direction: column;
     width: 100%;
   }
 
   .search-container {
     max-width: none;
-    width: 100%;   /* la búsqueda ocupa todo el ancho */
+    width: 100%;
   }
 
-  .theme-toggle {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.4rem;
-    min-width: 60px;
+  .header-buttons {
+    width: 100%;
+    justify-content: space-between;
   }
 
+  /* CORRECCIÓN: Los contadores deben mantenerse en línea en tablet */
   .pacientes-stats {
-    grid-template-columns: 1fr;
+    flex-direction: row; /* Mantener en línea en tablet */
     gap: 0.75rem;
   }
 
   .stat-card {
-    padding: 1rem;
+    max-width: none;
+    padding: 0.75rem;
+    flex: 1; /* Ambos contadores ocupan el mismo espacio */
   }
 
   .stat-number {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
   }
 
   .paciente-card {
@@ -606,13 +618,30 @@ img {
   }
 
   .btn {
-    width: 100%;
+    width: 5%; 
+    justify-content: center;
+  }
+
+  .theme-toggle {
+    width: 5%; 
     justify-content: center;
   }
 
   .instrucciones {
     margin-top: 1rem;
     padding: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Solo en móviles pequeños los contadores se apilan */
+  .pacientes-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .stat-card {
+    max-width: none;
   }
 }
 
@@ -630,32 +659,12 @@ img {
     font-size: 1.25rem;
   }
 
-  .header-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .search-container {
-    max-width: none;
-    width: 100%;   /* la búsqueda ocupa todo el ancho */
-  }
-
-  .theme-toggle {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.4rem;
-    min-width: 60px;
-  }
-
-  .pacientes-stats {
-    grid-template-columns: 1fr;
-  }
-
   .stat-card {
-    padding: 0.75rem;
+    padding: 0.5rem;
   }
 
   .stat-number {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
   }
 
   .paciente-card {

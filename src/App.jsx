@@ -5,6 +5,7 @@ import FirmaConsentimiento from "./pages/FirmaConsentimiento";
 import FirmaDesdeAccess from "./pages/FirmaDesdeAccess"; // ✅ Importación correcta
 import ListaPacientes from './pages/ListaPacientes';
 import { checkBackendConnection } from "./utils/apiCheck";
+import { FirmaProvider } from "./context/FirmaContext";  
 
 function App() {
   const [connectionStatus, setConnectionStatus] = useState({ loading: true, connected: false });
@@ -24,58 +25,61 @@ function App() {
 
   return (
     <Router>
-      <nav>
-        <Link to="/">Inicio</Link>
-        <Link to="/consentimientos">Consentimientos</Link>
-        {!connectionStatus.loading && (
-          <span className={`connection-status ${connectionStatus.connected ? 'connected' : 'disconnected'}`}>
-            {connectionStatus.connected ? '✅ Conectado' : '❌ Sin conexión'}
-          </span>
+      {/* 👇 Envolvemos TODO el contenido en el Provider */}
+      <FirmaProvider>
+        <nav>
+          <Link to="/">Inicio</Link>
+          <Link to="/consentimientos">Consentimientos</Link>
+          {!connectionStatus.loading && (
+            <span className={`connection-status ${connectionStatus.connected ? 'connected' : 'disconnected'}`}>
+              {connectionStatus.connected ? '✅ Conectado' : '❌ Sin conexión'}
+            </span>
+          )}
+        </nav>
+
+        {connectionStatus.loading && (
+          <div className="loading-bar">Verificando conexión con el servidor...</div>
         )}
-      </nav>
 
-      {connectionStatus.loading && (
-        <div className="loading-bar">Verificando conexión con el servidor...</div>
-      )}
-
-      {!connectionStatus.loading && !connectionStatus.connected && (
-        <div className="error-banner">
-          <h3>⚠️ Error de conexión</h3>
-          <p>No se pudo conectar con el servidor backend.</p>
-          <p>URL intentada: {connectionStatus.details?.apiUrl}</p>
-          <p>Error: {connectionStatus.details?.error}</p>
-        </div>
-      )}
-
-      <Routes>
-        <Route path="/" element={
-          <div style={{ padding: '20px' }}>
-            <h1>Sistema de Consentimientos Médicos</h1>
-            <p>Estado del backend: {connectionStatus.connected ? '✅ Conectado' : '❌ Desconectado'}</p>
-            {connectionStatus.details && (
-              <div>
-                <p><strong>URL del API:</strong> {connectionStatus.details.apiUrl}</p>
-                {connectionStatus.connected && (
-                  <p><strong>Consentimientos cargados:</strong> {connectionStatus.details.consentimientosCount}</p>
-                )}
-              </div>
-            )}
+        {!connectionStatus.loading && !connectionStatus.connected && (
+          <div className="error-banner">
+            <h3>⚠️ Error de conexión</h3>
+            <p>No se pudo conectar con el servidor backend.</p>
+            <p>URL intentada: {connectionStatus.details?.apiUrl}</p>
+            <p>Error: {connectionStatus.details?.error}</p>
           </div>
-        } />
-        <Route path="/consentimientos" element={<Consentimientos />} />
-        <Route path="/firmaConsentimiento" element={<FirmaConsentimiento />} />
-        <Route path="/firma-acces" element={<FirmaDesdeAccess />} />
-        <Route path="/firma-access" element={<FirmaDesdeAccess />} />
-        <Route path="/firma" element={<FirmaDesdeAccess />} />
-        <Route path="/lista-pacientes" element={<ListaPacientes />} />
-        <Route path="*" element={
-            <div style={{ padding: '2rem', textAlign: 'center' }}>
-              <h2>Página no encontrada</h2>
-              <p>La ruta solicitada no existe.</p>
-              <a href="/">Volver al inicio</a>
+        )}
+
+        <Routes>
+          <Route path="/" element={
+            <div style={{ padding: '20px' }}>
+              <h1>Sistema de Consentimientos Médicos</h1>
+              <p>Estado del backend: {connectionStatus.connected ? '✅ Conectado' : '❌ Desconectado'}</p>
+              {connectionStatus.details && (
+                <div>
+                  <p><strong>URL del API:</strong> {connectionStatus.details.apiUrl}</p>
+                  {connectionStatus.connected && (
+                    <p><strong>Consentimientos cargados:</strong> {connectionStatus.details.consentimientosCount}</p>
+                  )}
+                </div>
+              )}
             </div>
           } />
-      </Routes>
+          <Route path="/consentimientos" element={<Consentimientos />} />
+          <Route path="/firmaConsentimiento" element={<FirmaConsentimiento />} />
+          <Route path="/firma-acces" element={<FirmaDesdeAccess />} />
+          <Route path="/firma-access" element={<FirmaDesdeAccess />} />
+          <Route path="/firma" element={<FirmaDesdeAccess />} />
+          <Route path="/lista-pacientes" element={<ListaPacientes />} />
+          <Route path="*" element={
+              <div style={{ padding: '2rem', textAlign: 'center' }}>
+                <h2>Página no encontrada</h2>
+                <p>La ruta solicitada no existe.</p>
+                <a href="/">Volver al inicio</a>
+              </div>
+            } />
+        </Routes>
+      </FirmaProvider>
     </Router>
   );
 }

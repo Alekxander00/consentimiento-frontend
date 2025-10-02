@@ -129,12 +129,12 @@ const ListaPacientes = () => {
           <span className="stat-number">{pacientesFiltrados.length}</span>
           <span className="stat-label">Resultados de búsqueda</span>
         </div>
-        <div className="stat-card">
+        {/* <div className="stat-card">
           <span className="stat-number">
             {pacientes.filter(p => p.firmado).length}
           </span>
           <span className="stat-label">Total firmados</span>
-        </div>
+        </div> */}
       </div>
 
       <div className="pacientes-content">
