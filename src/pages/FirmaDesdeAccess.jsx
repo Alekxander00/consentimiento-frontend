@@ -235,13 +235,6 @@ const FirmaDesdeAccess = () => {
           </div>
         </div>
       </div>
-
-      <div className="actions">
-        <button onClick={guardarConsentimiento} className="btn btn-guardar">
-          ✅ Guardar Consentimiento Firmado
-        </button>
-        <button className="btn btn-cancelar" onClick={() => navigate('/lista-pacientes')}>❌ Cancelar</button>
-      </div>
     </div>
   );
 };
@@ -327,6 +320,9 @@ const draw = (e) => {
       <div className="canvas-actions">
         <button onClick={clearCanvas} className="btn btn-limpiar">
           🧹 Limpiar Firma
+        </button>
+        <button onClick={guardarConsentimiento} className="btn btn-guardar">
+    ✅ Guardar Consentimiento Firmado
         </button>
       </div>
     </div>
