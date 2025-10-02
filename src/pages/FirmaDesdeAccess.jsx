@@ -2,6 +2,63 @@ import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import './FirmaConsentimiento.css';
 
+const guardarConsentimiento = async () => {
+    if (!firmaData || !pacienteData) {
+      alert("Debe realizar la firma primero");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('idconsto', pacienteData.consentimiento_id || pacienteData.idconsto);
+      formData.append('paciente_nombre', pacienteData.paciente_nombre);
+      formData.append('paciente_identificacion', pacienteData.paciente_identificacion);
+      formData.append('paciente_telefono', pacienteData.paciente_telefono || '');
+      formData.append('paciente_direccion', pacienteData.paciente_direccion || '');
+      formData.append('profesional_id', pacienteData.id_profesional || '');
+      formData.append('aceptacion', 'Acepto el procedimiento');
+      formData.append('declaracion', 'Declaro que he entendido la información');
+      formData.append('id_access', pacienteId);
+      
+      // Convertir base64 a blob para la firma
+      const byteCharacters = atob(firmaData.split(',')[1]);
+      const byteArrays = [];
+      
+      for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+        const slice = byteCharacters.slice(offset, offset + 1024);
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
+      }
+      
+      const blob = new Blob(byteArrays, { type: 'image/png' });
+      formData.append('paciente_firma', blob, 'firma.png');
+
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      const response = await fetch(`${API_URL}/consentimientos-firmados`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al guardar el consentimiento');
+      }
+
+      const resultado = await response.json();
+      alert("Consentimiento firmado y guardado exitosamente");
+      
+      // Redirigir a la página de PDF o cerrar
+      window.open(`${API_URL}/generar-pdf/${resultado.id}`, '_blank');
+      
+    } catch (err) {
+      console.error("Error al guardar:", err);
+      alert("Error al guardar el consentimiento");
+    }
+  };
+
 const FirmaDesdeAccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -59,62 +116,7 @@ const FirmaDesdeAccess = () => {
     setFirmaData(firmaBase64);
   };
 
-  const guardarConsentimiento = async () => {
-    if (!firmaData || !pacienteData) {
-      alert("Debe realizar la firma primero");
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append('idconsto', pacienteData.consentimiento_id || pacienteData.idconsto);
-      formData.append('paciente_nombre', pacienteData.paciente_nombre);
-      formData.append('paciente_identificacion', pacienteData.paciente_identificacion);
-      formData.append('paciente_telefono', pacienteData.paciente_telefono || '');
-      formData.append('paciente_direccion', pacienteData.paciente_direccion || '');
-      formData.append('profesional_id', pacienteData.id_profesional || '');
-      formData.append('aceptacion', 'Acepto el procedimiento');
-      formData.append('declaracion', 'Declaro que he entendido la información');
-      formData.append('id_access', pacienteId);
-      
-      // Convertir base64 a blob para la firma
-      const byteCharacters = atob(firmaData.split(',')[1]);
-      const byteArrays = [];
-      
-      for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
-        const slice = byteCharacters.slice(offset, offset + 1024);
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
-      
-      const blob = new Blob(byteArrays, { type: 'image/png' });
-      formData.append('paciente_firma', blob, 'firma.png');
-
-      const API_URL = import.meta.env.VITE_API_URL || '/api';
-      const response = await fetch(`${API_URL}/consentimientos-firmados`, {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!response.ok) {
-        throw new Error('Error al guardar el consentimiento');
-      }
-
-      const resultado = await response.json();
-      alert("Consentimiento firmado y guardado exitosamente");
-      
-      // Redirigir a la página de PDF o cerrar
-      window.open(`${API_URL}/generar-pdf/${resultado.id}`, '_blank');
-      
-    } catch (err) {
-      console.error("Error al guardar:", err);
-      alert("Error al guardar el consentimiento");
-    }
-  };
+  
 
   const toggleTema = () => {
     setTemaOscuro(!temaOscuro);
@@ -235,6 +237,13 @@ const FirmaDesdeAccess = () => {
           </div>
         </div>
       </div>
+
+      {/* <div className="actions">
+        <button onClick={guardarConsentimiento} className="btn btn-guardar">
+          ✅ Guardar Consentimiento Firmado
+        </button>
+        <button className="btn btn-cancelar" onClick={() => navigate('/lista-pacientes')}>❌ Cancelar</button>
+      </div> */}
     </div>
   );
 };
@@ -322,8 +331,9 @@ const draw = (e) => {
           🧹 Limpiar Firma
         </button>
         <button onClick={guardarConsentimiento} className="btn btn-guardar">
-    ✅ Guardar Consentimiento Firmado
+          ✅ Guardar Consentimiento Firmado
         </button>
+        
       </div>
     </div>
   );
