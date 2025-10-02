@@ -75,10 +75,11 @@
 
 .firma-content {
   flex: 1;
-  overflow-y: auto; /* ahora el scroll es general */
+  overflow-y: auto;
   padding: 1.5rem;
   gap: 1.5rem;
-  height: auto; /* quitar la altura forzada */
+  height: auto;
+  padding-bottom: 100px; /* 👈 espacio para que no quede tapado por .actions */
 }
 
 /* Panel izquierdo - Información del paciente y consentimiento CON SCROLL INTERNO */
@@ -324,17 +325,22 @@
 }
 
 .actions {
-  position: fixed; /* ahora se pega al viewport */
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   background: var(--color-tarjeta);
   padding: 1rem;
   border-top: 1px solid var(--color-bordes);
-  z-index: 100; /* encima del contenido */
+  z-index: 100;
   display: flex;
   justify-content: center;
   gap: 1rem;
+  height: 80px; /* 👈 defines altura del footer */
+}
+
+.firma-content {
+  padding-bottom: 80px; /* 👈 el mismo valor del footer */
 }
 
 /* Botones mejorados */
