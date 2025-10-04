@@ -327,11 +327,11 @@ const draw = (e) => {
           style={{ touchAction: "none", cursor: "crosshair" }} // 👈 clave en móviles
         />
       </div>
-      <div className="canvas-actions">
-        <button onClick={clearCanvas} className="btn btn-limpiar">
+      <div className="botones_limpiar_guardar">
+        <button onClick={clearCanvas} className="btn_btn-limpiar">
           🧹 Limpiar Firma
         </button>
-        <button onClick={onGuardar} className="btn btn-guardar">
+        <button onClick={onGuardar} className="btn_btn-guardar">
           ✅ Guardar Consentimiento Firmado
         </button>
         

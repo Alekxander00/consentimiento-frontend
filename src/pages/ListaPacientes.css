@@ -555,6 +555,8 @@ img {
   }
 }
 
+
+
 @media (max-width: 900px) {
   /* Ocultar tabla y mostrar tarjetas en móvil */
   .pacientes-table-container {
@@ -618,7 +620,7 @@ img {
   }
 
   .btn {
-    width: 5%; 
+    width: 20%; 
     justify-content: center;
   }
 

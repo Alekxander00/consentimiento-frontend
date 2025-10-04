@@ -57,6 +57,44 @@
   min-height: 70px;
 }
 
+.btn_btn-guardar{
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  min-height: 40px;
+  min-width: 100px;
+  background: var(--color-primario);
+  color: white;
+}
+
+.btn_btn-limpiar{
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  min-height: 40px;
+  min-width: 100px;
+  background: var(--color-primario);
+  color: white;
+}
+
 .firma-header h1 {
   margin: 0;
   font-size: 1.25rem;
@@ -314,6 +352,15 @@
   background: transparent;
 }
 
+.botones_limpiar_guardar{
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  flex-shrink: 0;
+}
+
 .canvas-actions {
   display: flex;
   gap: 0.75rem;
@@ -489,15 +536,7 @@
 }
 
 @media (max-width: 900px) {
-  /* .actions {
-    flex-direction: column;
-    align-items: center;
-  } */
-
-  .btn {
-    width: 100%;
-    max-width: 300px;
-  }
+  
 
   .firma-header {
     padding: 0.75rem 1rem;
@@ -555,10 +594,7 @@
     padding: 1rem;
   } */
 
-  .btn {
-    width: 100%;
-    max-width: 300px;
-  }
+  
 
   .canvas-actions {
     flex-direction: column;
