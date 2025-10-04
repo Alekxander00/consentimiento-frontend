@@ -165,7 +165,7 @@ const FirmaDesdeAccess = () => {
       </header>
 
       <div className="firma-content">
-        <div className="content-left">
+        <div className="firma-panel-izquierdo">
           <div className="paciente-info">
             <h3>Datos del Paciente</h3>
             <div className="info-grid">
@@ -222,7 +222,7 @@ const FirmaDesdeAccess = () => {
           </div>
         </div>
 
-        <div className="content-right">
+        <div className="firma-panel-derecho">
           <div className="firma-section">
             <h3>Firma del Paciente</h3>
             <CanvasFirma 
@@ -314,7 +314,7 @@ const draw = (e) => {
       <div className="canvas-wrapper">
         <canvas
           ref={canvasRef}
-          width={800}
+          width={750}
           height={250}
           onMouseDown={startDrawing}
           onMouseMove={draw}

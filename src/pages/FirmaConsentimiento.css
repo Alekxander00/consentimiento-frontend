@@ -1,4 +1,4 @@
-/* FirmaConsentimiento.css - VERSIÓN CON SCROLL FUNCIONAL */
+/* FirmaConsentimiento.css - VERSIÓN CORREGIDA PARA TABLET */
 
 :root {
   --color-fondo: #f8fafc;
@@ -30,16 +30,22 @@
   --color-error: #ef4444;
 }
 
-/* CONTENEDOR PRINCIPAL - SCROLL HABILITADO */
+/* RESET PARA TABLET/MÓVIL */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .firma-container {
   width: 100vw;
   height: 100vh;
-  padding: 0;
-  margin: 0;
+  height: 100dvh; /* Para dispositivos móviles */
   display: flex;
   flex-direction: column;
   background: var(--color-fondo);
-  overflow: hidden; /* Mantenemos hidden aquí */
+  overflow: hidden;
   position: fixed;
   top: 0;
   left: 0;
@@ -58,27 +64,64 @@
   min-height: 70px;
 }
 
-/* CONTENIDO PRINCIPAL - SCROLL HABILITADO */
+.btn_btn-guardar, .btn_btn-limpiar {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  min-height: 40px;
+  min-width: 100px;
+  background: var(--color-primario);
+  color: white;
+}
+
+.firma-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* CONTENIDO PRINCIPAL - SCROLL CORREGIDO */
 .firma-content {
   flex: 1;
   display: flex;
   gap: 1.5rem;
   padding: 1.5rem;
-  overflow-y: auto; /* ¡ESTO ES CLAVE! */
+  overflow-y: auto;
+  overflow-x: hidden;
   min-height: 0;
+  -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
 }
 
-/* PANEL IZQUIERDO - SIN RESTRICCIONES DE OVERFLOW */
+/* PANEL IZQUIERDO */
 .firma-panel-izquierdo {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   min-width: 0;
-  overflow: visible; /* Cambiado de hidden */
+  overflow: visible;
 }
 
-/* PANEL DERECHO - SIN RESTRICCIONES DE OVERFLOW */
+/* PANEL DERECHO */
 .firma-panel-derecho {
   width: 100%;
   max-width: 500px;
@@ -86,74 +129,10 @@
   flex-direction: column;
   gap: 1.5rem;
   min-width: 300px;
-  overflow: visible; /* Cambiado de hidden */
+  overflow: visible;
 }
 
-/* CONSENTIMIENTO - SIN RESTRICCIONES */
-.consentimiento-info {
-  background: var(--color-tarjeta);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px var(--color-sombra);
-  border: 1px solid var(--color-bordes);
-  display: flex;
-  flex-direction: column;
-}
-
-.consentimiento-info h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-texto);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--color-bordes);
-}
-
-.consentimiento-content {
-  flex: 1;
-  overflow: visible; /* Cambiado de auto/scroll */
-}
-
-/* Secciones de contenido */
-.content-section {
-  background: var(--color-fondo);
-  padding: 1.25rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  border-left: 4px solid var(--color-primario);
-  transition: all 0.3s ease;
-}
-
-.content-section:hover {
-  transform: translateX(2px);
-  box-shadow: 0 2px 8px var(--color-sombra);
-}
-
-.content-section h4 {
-  margin: 0 0 0.75rem 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--color-texto);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border-bottom: 1px solid var(--color-bordes);
-  padding-bottom: 0.5rem;
-}
-
-.content-section p {
-  margin: 0;
-  color: var(--color-texto);
-  line-height: 1.6;
-  font-size: 0.9rem;
-  white-space: pre-line;
-}
-
-/* Información del paciente */
+/* INFORMACIÓN DEL PACIENTE */
 .paciente-info {
   background: var(--color-tarjeta);
   border-radius: 12px;
@@ -208,6 +187,73 @@
   word-break: break-word;
 }
 
+/* CONSENTIMIENTO */
+.consentimiento-info {
+  background: var(--color-tarjeta);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px var(--color-sombra);
+  border: 1px solid var(--color-bordes);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 200px;
+  overflow: visible;
+}
+
+.consentimiento-info h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-bordes);
+}
+
+.consentimiento-content {
+  flex: 1;
+  overflow: visible;
+}
+
+/* Secciones de contenido */
+.content-section {
+  background: var(--color-fondo);
+  padding: 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--color-primario);
+  transition: all 0.3s ease;
+}
+
+.content-section:hover {
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px var(--color-sombra);
+}
+
+.content-section h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-bordes);
+  padding-bottom: 0.5rem;
+}
+
+.content-section p {
+  margin: 0;
+  color: var(--color-texto);
+  line-height: 1.6;
+  font-size: 0.9rem;
+  white-space: pre-line;
+}
+
 /* ÁREA DE FIRMA */
 .firma-section {
   background: var(--color-tarjeta);
@@ -219,7 +265,7 @@
   display: flex;
   flex-direction: column;
   min-height: 400px;
-  overflow: visible; /* Cambiado de hidden */
+  overflow: visible;
 }
 
 .firma-section h3 {
@@ -241,7 +287,12 @@
   align-items: center;
   margin-bottom: 1.5rem;
   min-height: 300px;
-  overflow: visible; /* Cambiado de hidden */
+  overflow: visible;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: none;
 }
 
 .canvas-wrapper {
@@ -300,9 +351,14 @@
   position: relative;
   z-index: 2;
   background: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: none;
 }
 
-.botones_limpiar_guardar, .canvas-actions {
+.botones_limpiar_guardar {
   display: flex;
   gap: 0.75rem;
   justify-content: center;
@@ -312,43 +368,6 @@
 }
 
 /* Botones */
-
-/* .btn_btn-limpiar{
-padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  min-width: 120px;
-  background: var(--color-primario);
-  color: white;
-}
-
-.btn_btn-guardar{
-padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  min-width: 120px;
-  background: var(--color-primario);
-  color: white;
-} */
-
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
@@ -446,7 +465,7 @@ padding: 0.75rem 1.5rem;
   transform: scale(1.05);
 }
 
-/* SCROLLBAR PERSONALIZADA SOLO PARA EL CONTENIDO PRINCIPAL */
+/* SCROLLBAR PERSONALIZADA */
 .firma-content::-webkit-scrollbar {
   width: 8px;
 }
@@ -465,7 +484,7 @@ padding: 0.75rem 1.5rem;
   background: var(--color-primario-hover);
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE CORREGIDO ===== */
 @media (max-width: 1600px) {
   .firma-content {
     flex-direction: column;
@@ -486,6 +505,23 @@ padding: 0.75rem 1.5rem;
   .canvas-wrapper {
     min-height: 200px;
     max-height: 300px;
+  }
+}
+
+@media (max-width: 1024px) {
+  /* Tablet específico */
+  .firma-container {
+    height: 100dvh; /* Usar dynamic viewport height */
+  }
+  
+  .firma-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .canvas-wrapper {
+    min-height: 250px;
+    max-height: 350px;
   }
 }
 
@@ -538,12 +574,12 @@ padding: 0.75rem 1.5rem;
     padding: 1rem;
   }
 
-  .canvas-actions {
+  .botones_limpiar_guardar {
     flex-direction: column;
     align-items: center;
   }
 
-  .btn-limpiar {
+  .btn_btn-limpiar, .btn_btn-guardar {
     width: 100%;
     max-width: 200px;
   }
@@ -592,9 +628,33 @@ padding: 0.75rem 1.5rem;
     font-size: 0.85rem;
   }
 
-  .btn {
+  .btn_btn-guardar, .btn_btn-limpiar {
     padding: 0.6rem 1.2rem;
     font-size: 0.8rem;
     min-height: 40px;
+  }
+}
+
+/* Mejoras para dispositivos táctiles */
+@media (hover: none) and (pointer: coarse) {
+  .canvas-wrapper::before {
+    content: "Toque y deslice para firmar";
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  
+  .firma-canvas {
+    cursor: pointer;
+  }
+  
+  .canvas-wrapper {
+    border-width: 4px;
+  }
+}
+
+/* Prevenir zoom en iOS */
+@supports (-webkit-touch-callout: none) {
+  .firma-canvas {
+    touch-action: pan-x pan-y;
   }
 }
