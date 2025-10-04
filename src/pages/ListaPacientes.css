@@ -52,7 +52,7 @@ img {
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: auto;
   position: fixed;
   top: 0;
   left: 0;
@@ -181,7 +181,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  overflow: hidden;
+  overflow: auto;
   min-height: 0;
 }
 
@@ -190,7 +190,7 @@ img {
   background: var(--color-tarjeta);
   border-radius: 12px;
   border: 1px solid var(--color-bordes);
-  overflow: hidden;
+  overflow: auto;
   box-shadow: 0 2px 4px var(--color-sombra);
   flex: 1;
   display: flex;
@@ -269,7 +269,7 @@ img {
   font-weight: 500;
   color: var(--color-texto);
   max-width: 200px;
-  overflow: hidden;
+  overflow: auto;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
