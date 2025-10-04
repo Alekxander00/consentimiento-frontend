@@ -181,10 +181,10 @@ const FirmaDesdeAccess = () => {
                 <span className="info-label">Teléfono:</span>
                 <span className="info-value">{pacienteData.paciente_telefono || 'No especificado'}</span>
               </div>
-              <div className="info-item">
+              {/* <div className="info-item">
                 <span className="info-label">Dirección:</span>
                 <span className="info-value">{pacienteData.paciente_direccion || 'No especificado'}</span>
-              </div>
+              </div> */}
             </div>
           </div>
 
