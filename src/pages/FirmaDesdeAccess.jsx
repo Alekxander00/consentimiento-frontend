@@ -314,8 +314,8 @@ const draw = (e) => {
       <div className="canvas-wrapper">
         <canvas
           ref={canvasRef}
-          width={600}
-          height={300}
+          width={800}
+          height={250}
           onMouseDown={startDrawing}
           onMouseMove={draw}
           onMouseUp={endDrawing}
